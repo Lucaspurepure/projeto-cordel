@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Montserrat', sans-serif;
+      background: #f9f9f9;
+      overflow-y: scroll;
+      
+    }
+    .preview {
+      width: 794px;
+      height: 1123px;
+      background: #fff;
+      border: 1px solid #ddd;
+      
+      
+      position: relative;
+      color: #333;
+    }
+    /* Cabeçalho */
+    .header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #007bff;
+      padding-bottom: 10px;
+      margin-bottom: 25px;
+      padding: 20px;
+      
+    }
+    .header-left {
+      flex: 1;
+      display: block;
+      width: 80%;
+
+    }
+    .header-left h1 {
+      font-size: 30px;
+      font-weight: 700;
+      color: #222;
+    }
+    .header-left h2 {
+      font-size: 18px;
+      font-weight: 500;
+      color: #007bff;
+      margin-top: 5px;
+    }
+    .header-right{
+      width: 20%;
+      display: block;
+      align-items: self-end;
+  
+    }
+    .header-right img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #007bff;
+    }
+
+    /* Corpo com duas colunas */
+    .content {
+      
+      padding: 20px;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      gap: 40px;
+    }
+
+    /* Coluna esquerda */
+    .left {
+      width: 35%;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      font-size: 14px;
+      color: #555;
+      box-sizing: border-box;
+    }
+    .left section {
+      border-top: 1px solid #ddd;
+      padding-top: 15px;
+    }
+    .left section:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+    .left section h3 {
+      color: #007bff;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .left ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .left ul li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Ícones pequenos */
+    .icon {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      fill: #007bff;
+      flex-shrink: 0;
+    }
+
+    /* Coluna direita */
+    .right {
+      width: 65%;
+      font-size: 15px;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      box-sizing: border-box;
+    }
+    .right section h3 {
+      font-size: 20px;
+      color: #007bff;
+      margin-bottom: 12px;
+      font-weight: 700;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .right section p {
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+    .right section ul {
+      list-style-type: square;
+      padding-left: 20px;
+      margin: 0;
+    }
+    .right section ul li {
+      margin-bottom: 6px;
+    }
+   @media screen and (max-width: 768px) {
+  body {
+    height: auto;
+    overflow-y: auto;
+    
+  }
+
+  .preview {
+    width: 794px;
+    height: 1123px;
+    
+    transform-origin: top left;
+    margin: 0 auto 30px auto;
+  }
+}
+.tudo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+  </style>
+</head>
+<body>
+  <div class="preview">
+
+    <div class="tudo">
+      <div class="header">
+        <div class="header-left">
+          <h1 id="preview-name">Seu Nome</h1>
+          <h2 id="preview-position">Cargo</h2>
+        </div>
+        <div class="header-right">
+          <img id="preview-foto" src="" alt="Foto">
+        </div>
+      </div>
+      <div class="content">
+        <div class="left">
+          <section>
+            <h3 id="preview-phone-title">Contato</h3>
+            <ul id="preview-phone-list"></ul>
+            <ul id="preview-email-list"></ul>
+            <ul id="preview-address-list"></ul>
+            <ul id="preview-website-list"></ul>
+          </section>
+          <section>
+            <h3 id="preview-skills-title">Habilidades Técnicas</h3>
+            <ul id="preview-skills-list"></ul>
+          </section>
+          <section>
+            <h3 id="preview-languages-title">Idiomas</h3>
+            <ul id="preview-languages-list"></ul>
+          </section>
+          <section>
+            <h3 id="preview-reference-title">Referência</h3>
+            <p id="preview-reference"></p>
+          </section>
+        </div>
+        <div class="right">
+          <section>
+            <h3 id="preview-profile-title">Perfil</h3>
+            <p id="preview-profile"></p>
+          </section>
+          <section>
+            <h3 id="preview-experience-title">Experiência Profissional</h3>
+            <p id="preview-experience"></p>
+            <ul id="preview-experience-extras-list"></ul>
+          </section>
+          <section>
+            <h3 id="preview-education-title">Formação</h3>
+            <ul id="preview-education-list"></ul>
+          </section>
+          <section>
+            <h3 id="preview-other-skills-title">Outras Habilidades</h3>
+            <ul id="preview-other-skills-list"></ul>
+          </section>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

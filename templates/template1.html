@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%; width: 100%;
+      font-family: 'Montserrat', sans-serif;
+      overflow-y: scroll;
+    }
+    .preview {
+      width: 794px;
+      height: 1123px;
+      display: flex;
+      box-sizing: border-box;
+      background: white;
+    }
+    .left {
+      width: 35%;
+      height: 1123px; /* ocupa toda altura da página */
+      background: #2f3e52;
+      color: white;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+    .left .top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .left img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid white;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .left h1 {
+      font-size: 18px;
+      margin: 0;
+      text-align: center;
+    }
+    .left h2 {
+      font-size: 14px;
+      font-weight: normal;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .left .section {
+      margin-top: 10px;
+      width: 100%;
+    }
+    .left .section h3 {
+      font-size: 14px;
+      margin: 10px 0 5px;
+      border-bottom: 1px solid white;
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+    .left .section ul {
+      padding-left: 0;
+      list-style: none;
+      font-size: 12px;
+      text-align: left;
+      margin: 0;
+    }
+    .left .section ul li {
+      margin-bottom: 4px;
+    }
+    .right {
+      width: 65%;
+      height: 1123px; /* altura total para alinhar */
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .right .section {
+      margin-bottom: 15px;
+      width: 100%;
+    }
+    .right .section h3 {
+      font-size: 14px;
+      margin: 10px 0 5px;
+      border-bottom: 1px solid black;
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+    .right .section ul {
+      padding-left: 20px;
+      font-size: 12px;
+      margin: 0;
+    }
+    .right p {
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0 0 10px;
+    }
+
+    #preview-experience-extras-list,
+    #preview-education-list,
+    #preview-other-skills-list {
+    list-style-type: square;
+    padding-left: 20px; /* para dar espaço para o bullet */
+    }
+   @media screen and (max-width: 768px) {
+  body {
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .preview {
+    width: 794px;
+    height: 1123px;
+    
+    transform-origin: top left;
+    margin: 0 auto 30px auto;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="preview">
+    <div class="left">
+      <div class="top">
+        <img id="preview-foto" src="" alt="Foto" />
+        <h1 id="preview-name">Seu Nome</h1>
+        <h2 id="preview-position">Cargo</h2>
+      </div>
+
+      <div class="section">
+        <h3 id="preview-phone-title">Contato</h3>
+        <ul id="preview-phone-list"></ul>
+        <ul id="preview-email-list"></ul>
+        <ul id="preview-address-list"></ul>
+        <ul id="preview-website-list"></ul>
+      </div>
+
+      <div class="section">
+        <h3 id="preview-skills-title">Habilidades Técnicas</h3>
+        <ul id="preview-skills-list"></ul>
+      </div>
+
+      <div class="section">
+        <h3 id="preview-languages-title">Idiomas</h3>
+        <ul id="preview-languages-list"></ul>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="section">
+        <h3 id="preview-profile-title">Perfil</h3>
+        <p id="preview-profile"></p>
+      </div>
+
+      <div class="section">
+  <h3 id="preview-experience-title">Experiência Profissional</h3>
+  <p id="preview-experience"></p>
+  <ul id="preview-experience-extras-list" style="padding-left: 20px; margin-top: 5px;"></ul>
+</div>
+
+
+      <div class="section">
+        <h3 id="preview-education-title">Formação</h3>
+        <ul id="preview-education-list"></ul>
+      </div>
+
+      <div class="section">
+        <h3 id="preview-other-skills-title">Outras Habilidades</h3>
+        <ul id="preview-other-skills-list"></ul>
+      </div>
+
+      <div class="section">
+        <h3 id="preview-reference-title">Referência</h3>
+        <p id="preview-reference"></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
