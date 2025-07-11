@@ -10,7 +10,7 @@
       font-family: 'Montserrat', sans-serif;
       width: 100%;
       height: 100%;
-      overflow: scroll;
+      overflow: auto;
     }
     .preview {
       width: 794px;
@@ -28,7 +28,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      height: 1123px;
+      height: 100%;
     }
     .left img {
       width: 100px;
@@ -65,7 +65,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      height: 1123px;
+      height: 100%;
     }
     .header {
       margin-bottom: 30px;
@@ -138,6 +138,11 @@
       <div class="section">
         <h3 id="preview-languages-title">Idiomas</h3>
         <ul id="preview-languages-list"></ul>
+      </div>
+
+      <div class="section">
+          <h3 id="preview-availability-title" >Disponibilidade</h3>
+          <p id="preview-availability"></p>
       </div>
     </div>
 
