@@ -2,762 +2,331 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ex01</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crie Seu CV em Minutos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     html, body {
-      margin: 0; padding: 0; height: 100%;
-      font-family: 'Montserrat', sans-serif;
+      width: 100%;
+      overflow-x: hidden;
     }
     body {
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
     }
-    form {
-      width: 40%;
-      background: #fff;
-      padding: 20px;
-      overflow-y: auto;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #2f3e52;
+    header {
+      background-color: #4CAF50;
       color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .add-remove-btn {
-      background: #2f3e52;
-      color: white;
-      border: none;
-      padding: 4px 10px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 18px;
-      line-height: 1;
-    }
-    ul {
-      padding-left: 20px;
-      margin: 0;
-    }
-    /* PREVIEW */
-    .preview {
-      width: 60%;
-      background: #ccc;
+      padding: 1rem 2rem;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: flex-start;
-      overflow: hidden;
-      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    .header-top {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    nav {
+      width: 100%;
       position: relative;
     }
-    #cv-preview {
-      width: 794px;
-      height: 1123px;
-      background: white;
-      display: block;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-
-    /* Modal do Template */
-    #templateModal {
-      display: none;
-      position: fixed;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 15px;
-      z-index: 1000;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-    #templateModal h3 {
-      margin-top: 0;
-    }
-    #templateModal ul {
+    nav ul {
       list-style: none;
-      padding: 0;
-      margin: 0;
+      display: flex;
+      gap: 1rem;
     }
-    #templateModal li {
-      margin-bottom: 10px;
-    }
-    #templateModal button {
-      background: #2f3e52;
+    nav ul li a {
       color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
     }
-    /* Mensagem carregando PDF */
-    #loading-msg {
+    .hamburger {
       display: none;
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #2f3e52;
+      font-size: 1.5rem;
+      cursor: pointer;
       color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      z-index: 1000;
-      font-size: 14px;
+      margin-top: 1rem;
     }
-    /* Estilo para container dos campos dinâmicos com botão alinhado à direita */
-    .add-remove-field {
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: #4CAF50;
+      width: 100%;
+      padding: 1rem;
+      z-index: 998;
+    }
+    .mobile-menu li {
+      margin: 1rem 0;
+    }
+    .mobile-menu.show {
+      display: flex;
+    }
+    @media (min-width: 769px) {
+      header {
+        flex-direction: row;
+        align-items: center;
+      }
+      nav {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .hamburger {
+        display: none;
+      }
+      nav ul.desktop {
+        display: flex;
+      }
+    }
+    @media (max-width: 768px) {
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav ul.desktop {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+    }
+    .hero {
+      background: #f9f9f9;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      background: #4CAF50;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .steps, .models, .testimonials, .pricing, .faq {
+      text-align: center;
+    }
+    .steps .step {
+      margin-bottom: 2rem;
+    }
+    .model-slider {
       display: flex;
       align-items: center;
-      margin-top: 8px;
+      justify-content: center;
+      position: relative;
     }
-    .add-remove-field input,
-    .add-remove-field textarea,
-    .add-remove-field select {
-      flex: 1;
-      resize: vertical; /* para textarea */
+    .model-slider .arrow {
+      font-size: 2rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
     }
-    .add-remove-field button.add-remove-btn {
-      margin-left: 8px;
-      height: 34px;
-      padding: 0 10px;
-      flex-shrink: 0;
+    .model-slider .arrow.left {
+      left: 0;
     }
-    /* Especifico para textarea extra experiência */
-    #experience-extras-container textarea {
-      min-height: 50px;
+    .model-slider .arrow.right {
+      right: 0;
     }
-    /* Preview barra nivel de idioma */
-    .nivel-barra-container {
-      width: 150px;
-      margin-left: 10px;
+    .model-slider .container {
+      overflow-x: auto;
+      display: flex;
+      gap: 1rem;
+      scroll-behavior: smooth;
+      padding: 1rem 2rem;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;  /* IE and Edge */
     }
-    .nivel-barra-fundo {
+    .model-slider .container::-webkit-scrollbar {
+      display: none;
+    }
+    .model-slider img {
       width: 100%;
-      height: 12px;
-      background-color: #ddd;
-      border-radius: 6px;
-      overflow: hidden;
+      max-width: 250px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
     }
-    .nivel-barra-preenchida {
-      height: 12px;
-      background-color: #2f3e52;
-      border-radius: 6px;
-      transition: width 0.3s ease;
+    .pricing-table {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
     }
-@media screen and (max-width: 768px) {
-  body {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    margin: 0;
-    padding: 0;
-  }
-
-  form {
-    width: 100% !important;
-    height: auto;
-    overflow-y: visible;
-    padding: 15px;
-    box-sizing: border-box;
-  }
-
-  .preview {
-    width: 100% !important;
-    overflow-x: auto;
-    
-    box-sizing: border-box;
-    order: 2; /* força aparecer abaixo do form */
-  }
-
-  #cv-preview {
-    width: 794px !important;  /* tamanho real A4 */
-    height: 1123px !important; /* tamanho real A4 */
-    
-    transform-origin: top left;
-    margin: 0 auto 30px auto;
-    display: block;
-  }
-
-  #btnTemplateSelector, #download-btn {
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  #templateModal {
-    width: 90%;
-    left: 5%;
-    top: 10%;
-    transform: none;
-  }
-}
-
+    .plan {
+      border: 1px solid #ccc;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 280px;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
-
-  <form id="cv-form">
-    <input type="file" accept="image/*" onchange="carregarImagem(event)">
-    <h2>Preencha seu CV</h2>
-
-    <label>Nome</label>
-    <input id="name" oninput="updatePreview('name')">
-
-    <label>Cargo</label>
-    <input id="position" oninput="updatePreview('position')">
-
-    <label>Telefone</label>
-    <div id="phone-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampo('phone')">+</button>
-
-    <label>Email</label>
-    <div id="email-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampo('email')">+</button>
-
-    <label>Endereço</label>
-    <div id="address-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampo('address')">+</button>
-
-    <label>Website</label>
-    <div id="website-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampo('website')">+</button>
-
-    <label>Perfil</label>
-    <textarea id="profile" oninput="updatePreview('profile')"></textarea>
-
-    <label>Experiência Profissional</label>
-    <textarea id="experience" oninput="updatePreview('experience')"></textarea>
-    <!-- Container para campos extras experiência -->
-    <div id="experience-extras-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampoExperiencia()">+</button>
-
-    <label>Formação</label>
-    <div id="education-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampo('education')">+</button>
-
-    <label>Habilidades Técnicas</label>
-    <div id="skills-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampo('skills')">+</button>
-
-    <label>Outras Habilidades</label>
-    <div id="other-skills-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampo('other-skills')">+</button>
-
-    <label>Idiomas</label>
-    <!-- Aqui a escolha do tipo de nível -->
-    <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-      <span style="font-weight:bold;">Tipo de Nível:</span>
-      <label><input type="radio" name="nivelTipo" value="select" checked onchange="setIdiomaNivelTipo('select')"> Seletor</label>
-      <label><input type="radio" name="nivelTipo" value="range" onchange="setIdiomaNivelTipo('range')"> Barra</label>
+  <header>
+    <div class="header-top">
+      <div class="logo">CV Pronto</div>
+      <div class="hamburger" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
     </div>
-    <div id="languages-container"></div>
-    <button type="button" class="add-remove-btn" onclick="adicionarCampoIdioma()">+</button>
+    <nav>
+      <ul class="desktop">
+        <li><a href="#">Início</a></li>
+        <li><a href="#modelos">Modelos</a></li>
+        <li><a href="#como">Como Funciona</a></li>
+        <li><a href="#precos">Preços</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <ul class="mobile-menu" id="mobileMenu">
+        <li><a href="#" onclick="closeMenu()">Início</a></li>
+        <li><a href="#modelos" onclick="closeMenu()">Modelos</a></li>
+        <li><a href="#como" onclick="closeMenu()">Como Funciona</a></li>
+        <li><a href="#precos" onclick="closeMenu()">Preços</a></li>
+        <li><a href="#faq" onclick="closeMenu()">FAQ</a></li>
+        <li><a href="#contacto" onclick="closeMenu()">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <label>Referência</label>
-    <textarea id="reference" oninput="updatePreview('reference')"></textarea>
+  <section class="hero">
+    <h1>Crie o Seu Currículo Profissional em Minutos</h1>
+    <p>Escolha um modelo, preencha com seus dados e baixe seu CV em PDF de forma rápida e gratuita.</p>
+    <a class="btn" href="#">Comece Agora</a>
+  </section>
 
-    <label>Disponibilidade</label>
-    <textarea id="availability" oninput="updatePreview('availability')"></textarea>
+  <section class="section steps" id="como">
+    <h2>Como Funciona</h2>
+    <div class="step"><strong>1.</strong> Preencha os seus dados</div>
+    <div class="step"><strong>2.</strong> Escolha o seu modelo favorito</div>
+    <div class="step"><strong>3.</strong> Baixe seu CV em PDF</div>
+  </section>
 
-    <div style="margin-top: 20px;">
-      <button type="button" class="button" id="btnTemplateSelector">Selecionar Template</button>
-      <button type="button" class="button" id="download-btn" onclick="downloadPDF()">Baixar PDF</button>
+  <section class="section models" id="modelos">
+    <h2>Modelos Disponíveis</h2>
+    <div class="model-slider">
+      <button class="arrow left" onclick="scrollTemplates(-1)"><i class="fas fa-chevron-left"></i></button>
+      <div class="container" id="templateContainer">
+        <a href="form.html?template=template1">
+        <img src="img/template1.png" alt="Modelo Moderno"></a>
+
+        <a href="form.html?template=template2">
+        <img src="img/template2.png" alt="Modelo Criativo"></a>
+
+        <a href="form.html?template=template3">
+        <img src="img/template3.png" alt="Modelo Profissional"></a>
+
+        <a href="form.html?template=template4">
+        <img src="img/template1.png" alt="Modelo Elegante"></a>
+
+        <a href="form.html?template=template5">
+        <img src="img/template2.png" alt="Modelo Clássico"></a>
+
+        <a href="form.html?template=template4">
+        <img src="img/template1.png" alt="Modelo Elegante"></a>
+
+        <a href="form.html?template=template1">
+        <img src="img/template1.png" alt="Modelo Moderno"></a>
+      </div>
+      <button class="arrow right" onclick="scrollTemplates(1)"><i class="fas fa-chevron-right"></i></button>
     </div>
-  </form>
+    <a class="btn" href="#">Ver Todos os Modelos</a>
+  </section>
 
-  <div class="preview">
-    <div id="cv-preview"></div>
-  </div>
+  <section class="section testimonials">
+    <h2>O Que Nossos Usuários Dizem</h2>
+    <p>“Consegui meu emprego usando um CV criado aqui. Simplesmente maravilhoso!” – João M.</p>
+    <p>“O site é muito intuitivo e fácil de usar.” – Carla S.</p>
+  </section>
 
-  <div id="templateModal">
-    <h3>Escolha um Template:</h3>
-    <ul>
-      <li><button onclick="carregarTemplate('template1')">Template 1</button></li>
-      <li><button onclick="carregarTemplate('template2')">Template 2</button></li>
-      <li><button onclick="carregarTemplate('template3')">Template 3</button></li>
-      <li><button onclick="carregarTemplate('template4')">Template 4</button></li>
-      <li><button onclick="carregarTemplate('template5')">Template 5</button></li>
-    </ul>
-    <button onclick="document.getElementById('templateModal').style.display='none'">Fechar</button>
-  </div>
+  <section class="section pricing" id="precos">
+    <h2>Planos e Preços</h2>
+    <div class="pricing-table">
+      <div class="plan">
+        <h3>Gratuito</h3>
+        <p>✔ 3 modelos</p>
+        <p>✔ Download em PDF</p>
+        <p>❌ Personalização avançada</p>
+      </div>
+      <div class="plan">
+        <h3>Premium</h3>
+        <p>✔ Todos os modelos</p>
+        <p>✔ Download em PDF</p>
+        <p>✔ Personalização avançada</p>
+      </div>
+    </div>
+  </section>
 
-  <div id="loading-msg">Gerando PDF, por favor aguarde...</div>
+  <section class="section faq" id="faq">
+    <h2>Perguntas Frequentes</h2>
+    <p><strong>É realmente grátis?</strong> Sim! A versão gratuita já permite criar e baixar seu currículo.</p>
+    <p><strong>Posso editar depois de baixar?</strong> Você pode voltar e gerar quantas versões quiser.</p>
+    <p><strong>Meus dados estão seguros?</strong> Sim. Não armazenamos informações pessoais.</p>
+  </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <footer id="contacto">
+    <p>© 2025 CV Pronto. Todos os direitos reservados.</p>
+    <p><a href="#" style="color:#ccc">Termos de Uso</a> | <a href="#" style="color:#ccc">Política de Privacidade</a></p>
+  </footer>
 
   <script>
-  // Variável global para armazenar a imagem base64
-let imagemBase64 = null;
-
-// Global para controle do tipo de nível idioma
-let idiomaNivelTipo = 'select'; // 'select' ou 'range'
-
-function setIdiomaNivelTipo(tipo) {
-  idiomaNivelTipo = tipo;
-  recriarCamposIdiomas();
-  atualizarListaPreview('languages');
-}
-
-// Recria campos idiomas mantendo os valores atuais para aplicar o novo tipo
-function recriarCamposIdiomas() {
-  const container = document.getElementById("languages-container");
-  const valores = [];
-
-  container.querySelectorAll(".add-remove-field").forEach(div => {
-    const inputs = div.querySelectorAll("input, select");
-    const idioma = inputs[0]?.value || "";
-    let nivel;
-    if (idiomaNivelTipo === 'select') {
-      nivel = inputs[1]?.value || "Básico";
-    } else {
-      nivel = inputs[1]?.value || 0;
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('show');
     }
-    valores.push({ idioma, nivel });
-  });
 
-  container.innerHTML = "";
-
-  valores.forEach(v => adicionarCampoIdioma(v.idioma, v.nivel));
-}
-
-// Adiciona campo idioma + nível (select ou range) com botão remover
-function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
-  const container = document.getElementById("languages-container");
-
-  const div = document.createElement("div");
-  div.className = "add-remove-field";
-  div.style.gap = "10px";
-
-  // Input idioma
-  const inputIdioma = document.createElement("input");
-  inputIdioma.type = "text";
-  inputIdioma.placeholder = "Idioma";
-  inputIdioma.value = valorIdioma;
-  inputIdioma.oninput = () => atualizarListaPreview('languages');
-  inputIdioma.style.flex = "1";
-
-  // Campo nível
-  let nivelInput;
-  if (idiomaNivelTipo === 'select') {
-    nivelInput = document.createElement("select");
-    ["Básico", "Intermediário", "Fluente", "Nativo"].forEach(nivel => {
-      const option = document.createElement("option");
-      option.value = nivel;
-      option.textContent = nivel;
-      nivelInput.appendChild(option);
-    });
-    nivelInput.value = valorNivel || "Básico";
-    nivelInput.onchange = () => atualizarListaPreview('languages');
-    nivelInput.style.flex = "1";
-  } else {
-    nivelInput = document.createElement("input");
-    nivelInput.type = "range";
-    nivelInput.min = 0;
-    nivelInput.max = 4;
-    nivelInput.step = 1;
-    nivelInput.value = valorNivel !== null ? valorNivel : 0;
-    nivelInput.style.width = "150px";
-    nivelInput.oninput = () => atualizarListaPreview('languages');
-  }
-
-  // Botão remover
-  const btnRemover = document.createElement("button");
-  btnRemover.type = "button";
-  btnRemover.className = "add-remove-btn";
-  btnRemover.textContent = "-";
-  btnRemover.onclick = () => {
-    container.removeChild(div);
-    atualizarListaPreview('languages');
-  };
-
-  div.appendChild(inputIdioma);
-  div.appendChild(nivelInput);
-  div.appendChild(btnRemover);
-
-  container.appendChild(div);
-  atualizarListaPreview('languages');
-}
-
-function carregarTemplate(nome) {
-  fetch(`templates/${nome}.html`)
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("cv-preview").innerHTML = html;
-      aplicarTodosOsDados();
-      atualizarImagemPreview(); // Atualiza a imagem após trocar template
-    });
-  document.getElementById("templateModal").style.display = "none";
-}
-
-function carregarImagem(event) {
-  const arquivo = event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    imagemBase64 = e.target.result; // guarda aqui
-    atualizarImagemPreview();
-  };
-  if (arquivo) reader.readAsDataURL(arquivo);
-}
-
-function atualizarImagemPreview() {
-  const img = document.getElementById('preview-foto');
-  if(img && imagemBase64) {
-    img.src = imagemBase64;
-  }
-}
-
-function updatePreview(id) {
-  const valor = document.getElementById(id).value.trim();
-  const preview = document.getElementById("preview-" + id);
-  const titulo = document.getElementById("preview-" + id + "-title");
-  if(preview) preview.innerText = valor;
-  if(titulo) titulo.style.display = valor ? "block" : "none";
-
-  if(id === 'experience') {
-    atualizarListaExperienciaExtrasPreview();
-  }
-}
-
-// --- Experiência adicional com Ano + Descrição ---
-function adicionarCampoExperiencia() {
-  const container = document.getElementById("experience-extras-container");
-
-  const div = document.createElement("div");
-  div.className = "add-remove-field";
-  div.style.gap = "10px";
-
-  const ano = document.createElement("input");
-  ano.type = "text";
-  ano.placeholder = "Ano";
-  ano.style.width = "80px";
-  ano.oninput = atualizarListaExperienciaExtrasPreview;
-
-  const descricao = document.createElement("textarea");
-  descricao.placeholder = "Detalhe adicional de experiência";
-  descricao.style.flex = "1";
-  descricao.oninput = atualizarListaExperienciaExtrasPreview;
-
-  const btnRemover = document.createElement("button");
-  btnRemover.type = "button";
-  btnRemover.className = "add-remove-btn";
-  btnRemover.textContent = "-";
-  btnRemover.onclick = () => {
-    container.removeChild(div);
-    atualizarListaExperienciaExtrasPreview();
-  };
-
-  div.appendChild(ano);
-  div.appendChild(descricao);
-  div.appendChild(btnRemover);
-  container.appendChild(div);
-  atualizarListaExperienciaExtrasPreview();
-}
-
-function atualizarListaExperienciaExtrasPreview() {
-  const container = document.getElementById("experience-extras-container");
-  const preview = document.getElementById("preview-experience-extras-list");
-  const titulo = document.getElementById("preview-experience-title");
-
-  if (!preview) return;
-  preview.innerHTML = "";
-  let temConteudo = false;
-
-  const divs = container.querySelectorAll(".add-remove-field");
-  divs.forEach(div => {
-    const ano = div.querySelector("input");
-    const descricao = div.querySelector("textarea");
-
-    if (descricao.value.trim()) {
-      const linha = document.createElement("div");
-      linha.style.display = "flex";
-      linha.style.justifyContent = "space-between";
-      linha.style.marginBottom = "5px";
-
-      const spanAno = document.createElement("span");
-      spanAno.textContent = ano.value.trim();
-      spanAno.style.fontWeight = "bold";
-      spanAno.style.width = "100px";
-
-      const spanTexto = document.createElement("span");
-      spanTexto.textContent = descricao.value.trim();
-      spanTexto.style.flex = "1";
-
-      linha.appendChild(spanAno);
-      linha.appendChild(spanTexto);
-      preview.appendChild(linha);
-
-      temConteudo = true;
+    function closeMenu() {
+      document.getElementById('mobileMenu').classList.remove('show');
     }
-  });
 
-  // MOSTRAR título também se campo experiencia principal estiver preenchido
-  const experienciaPrincipal = document.getElementById("experience");
-  if(experienciaPrincipal && experienciaPrincipal.value.trim()) {
-    temConteudo = true;
-  }
-
-  if (titulo) titulo.style.display = temConteudo ? "block" : "none";
-}
-
-// --- Formação com Ano + Descrição ---
-function adicionarCampo(tipo) {
-  const container = document.getElementById(`${tipo}-container`);
-
-  // Se for o container 'education', cria input ano + input texto
-  if(tipo === 'education') {
-    const div = document.createElement("div");
-    div.className = "add-remove-field";
-    div.style.gap = "10px";
-
-    const ano = document.createElement("input");
-    ano.type = "text";
-    ano.placeholder = "Ano";
-    ano.style.width = "80px";
-    ano.oninput = () => atualizarListaPreview(tipo);
-
-    const descricao = document.createElement("input");
-    descricao.type = "text";
-    descricao.placeholder = "Descrição";
-    descricao.style.flex = "1";
-    descricao.oninput = () => atualizarListaPreview(tipo);
-
-    const btn = document.createElement("button");
-    btn.textContent = "-";
-    btn.type = "button";
-    btn.className = "add-remove-btn";
-    btn.onclick = () => {
-      container.removeChild(div);
-      atualizarListaPreview(tipo);
-    };
-
-    div.appendChild(ano);
-    div.appendChild(descricao);
-    div.appendChild(btn);
-    container.appendChild(div);
-    atualizarListaPreview(tipo);
-  } else {
-    // Para os demais campos só 1 input (como antes)
-    const div = document.createElement("div");
-    div.className = "add-remove-field";
-
-    const input = document.createElement("input");
-    input.type = "text";
-    input.oninput = () => atualizarListaPreview(tipo);
-
-    const btn = document.createElement("button");
-    btn.textContent = "-";
-    btn.type = "button";
-    btn.className = "add-remove-btn";
-    btn.onclick = () => {
-      container.removeChild(div);
-      atualizarListaPreview(tipo);
-    };
-
-    div.appendChild(input);
-    div.appendChild(btn);
-    container.appendChild(div);
-    atualizarListaPreview(tipo);
-  }
-}
-
-function atualizarListaPreview(tipo) {
-  const container = document.getElementById(`${tipo}-container`);
-  const preview = document.getElementById(`preview-${tipo}-list`);
-  const titulo = document.getElementById(`preview-${tipo}-title`);
-  if (!preview) return;
-
-  preview.innerHTML = "";
-  let temConteudo = false;
-
-  if(tipo === 'education') {
-    // Para formação, percorre as divs e pega ano + descrição
-    const divs = container.querySelectorAll(".add-remove-field");
-    divs.forEach(div => {
-      const inputs = div.querySelectorAll("input");
-      const ano = inputs[0]?.value.trim() || "";
-      const descricao = inputs[1]?.value.trim() || "";
-
-      if (descricao) {
-        const linha = document.createElement("div");
-        linha.style.display = "flex";
-        linha.style.justifyContent = "space-between";
-        linha.style.marginBottom = "5px";
-
-        const spanAno = document.createElement("span");
-        spanAno.textContent = ano;
-        spanAno.style.fontWeight = "bold";
-        spanAno.style.width = "100px";
-
-        const spanTexto = document.createElement("span");
-        spanTexto.textContent = descricao;
-        spanTexto.style.flex = "1";
-
-        linha.appendChild(spanAno);
-        linha.appendChild(spanTexto);
-        preview.appendChild(linha);
-
-        temConteudo = true;
-      }
-    });
-  } else if(tipo === 'languages') {
-    // Idiomas: mostrar idioma + nível (texto ou barra)
-    const divs = container.querySelectorAll(".add-remove-field");
-    divs.forEach(div => {
-      const inputs = div.querySelectorAll("input, select");
-      const idioma = inputs[0]?.value.trim() || "";
-      let nivel = inputs[1]?.value;
-
-      if(idioma) {
-        const linha = document.createElement("div");
-        linha.style.display = "flex";
-        linha.style.alignItems = "center";
-        linha.style.marginBottom = "6px";
-
-        const spanIdioma = document.createElement("span");
-        spanIdioma.textContent = idioma;
-        spanIdioma.style.fontWeight = "bold";
-        spanIdioma.style.width = "150px";
-
-        linha.appendChild(spanIdioma);
-
-        if (idiomaNivelTipo === 'select') {
-          // Mostrar nível como texto
-          const spanNivel = document.createElement("span");
-          spanNivel.textContent = nivel;
-          spanNivel.style.flex = "1";
-          linha.appendChild(spanNivel);
-        } else {
-          // Mostrar nível como barra horizontal (0 a 4)
-          const barraContainer = document.createElement("div");
-          barraContainer.className = "nivel-barra-container";
-
-          const barraFundo = document.createElement("div");
-          barraFundo.className = "nivel-barra-fundo";
-
-          const barraPreenchida = document.createElement("div");
-          barraPreenchida.className = "nivel-barra-preenchida";
-
-          // Calcular largura percentual da barra (0 a 4)
-          const larguraPerc = Math.min(Math.max(parseInt(nivel), 0), 4) * 25;
-          barraPreenchida.style.width = larguraPerc + "%";
-
-          barraFundo.appendChild(barraPreenchida);
-          barraContainer.appendChild(barraFundo);
-          linha.appendChild(barraContainer);
-        }
-
-        preview.appendChild(linha);
-        temConteudo = true;
-      }
-    });
-  } else {
-    // Para outros campos, lista normal com ícones
-    const inputs = container.querySelectorAll("input");
-    inputs.forEach(input => {
-      if (input.value.trim()) {
-        const li = document.createElement("li");
-        let icon = "• ";
-        if (tipo === "phone") icon = "📞 ";
-        else if (tipo === "email") icon = "✉️ ";
-        else if (tipo === "address") icon = "🏠 ";
-        else if (tipo === "website") icon = "🌐 ";
-        else if (tipo === "skills") icon = "⚙️ ";
-        else if (tipo === "other-skills") icon = "⭐ ";
-        li.textContent = icon + input.value;
-        preview.appendChild(li);
-        temConteudo = true;
-      }
-    });
-  }
-
-  if (titulo) titulo.style.display = temConteudo ? "block" : "none";
-}
-
-function aplicarTodosOsDados() {
-  updatePreview('name');
-  updatePreview('position');
-  updatePreview('profile');
-  updatePreview('experience');
-  updatePreview('reference');
-  updatePreview('availability');  // Para o campo disponibilidade
-  atualizarListaPreview('phone');
-  atualizarListaPreview('email');
-  atualizarListaPreview('address');
-  atualizarListaPreview('website');
-  atualizarListaPreview('education');
-  atualizarListaPreview('skills');
-  atualizarListaPreview('other-skills');
-  atualizarListaPreview('languages');
-  atualizarListaExperienciaExtrasPreview();
-}
-
-function downloadPDF() {
-  window.scrollTo(0, 0);
-
-  const loading = document.getElementById("loading-msg");
-  const button = document.getElementById("download-btn");
-
-  loading.style.display = "block";
-  button.disabled = true;
-
-  setTimeout(() => {
-    const element = document.getElementById("cv-preview");
-
-    html2pdf().set({
-      margin: [0, 0, 0, 0],
-      filename: "cv.pdf",
-      image: { type: "jpeg", quality: 1 },
-      html2canvas: {
-        scale: 2,
-        scrollY: 0,
-        useCORS: true
-      },
-      jsPDF: {
-        unit: "px",
-        format: [794, 1123],
-        orientation: "portrait"
-      }
-    }).from(element).save().then(() => {
-      loading.style.display = "none";
-      button.disabled = false;
-    });
-  }, 300);
-}
-
-window.addEventListener("DOMContentLoaded", function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const template = urlParams.get('template') || 'template1';
-  carregarTemplate(template);
-});
-
-// No final do seu script, dentro do DOMContentLoaded, ou diretamente no script:
-document.getElementById("btnTemplateSelector").addEventListener("click", () => {
-  document.getElementById("templateModal").style.display = "block";
-});
-
-</script>
-
-
+    function scrollTemplates(direction) {
+      const container = document.getElementById('templateContainer');
+      const scrollAmount = 300;
+      container.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
+    }
+  </script>
 </body>
 </html>

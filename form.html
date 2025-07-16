@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Preencha seu formulario</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    form {
+      width: 40%;
+      background: #fff;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #2f3e52;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .add-remove-btn {
+      background: #2f3e52;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 1;
+    }
+    ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+    /* PREVIEW */
+    .preview {
+      width: 60%;
+      background: #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+    }
+    #cv-preview {
+      width: 794px;
+      height: 1123px;
+      background: white;
+      display: block;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* Modal do Template */
+    #templateModal {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 15px;
+      z-index: 1000;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    #templateModal h3 {
+      margin-top: 0;
+    }
+    #templateModal ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #templateModal li {
+      margin-bottom: 10px;
+    }
+    #templateModal button {
+      background: #2f3e52;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    /* Mensagem carregando PDF */
+    #loading-msg {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2f3e52;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+      font-size: 14px;
+    }
+    /* Estilo para container dos campos dinâmicos com botão alinhado à direita */
+    .add-remove-field {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .add-remove-field input,
+    .add-remove-field textarea,
+    .add-remove-field select {
+      flex: 1;
+      resize: vertical; /* para textarea */
+    }
+    .add-remove-field button.add-remove-btn {
+      margin-left: 8px;
+      height: 34px;
+      padding: 0 10px;
+      flex-shrink: 0;
+    }
+    /* Especifico para textarea extra experiência */
+    #experience-extras-container textarea {
+      min-height: 50px;
+    }
+    /* Preview barra nivel de idioma */
+    .nivel-barra-container {
+      width: 150px;
+      margin-left: 10px;
+    }
+    .nivel-barra-fundo {
+      width: 100%;
+      height: 12px;
+      background-color: #ddd;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .nivel-barra-preenchida {
+      height: 12px;
+      background-color: #2f3e52;
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+@media screen and (max-width: 768px) {
+  body {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  form {
+    width: 100% !important;
+    height: auto;
+    overflow-y: visible;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .preview {
+    width: 100% !important;
+    overflow-x: auto;
+    
+    box-sizing: border-box;
+    order: 2; /* força aparecer abaixo do form */
+  }
+
+  #cv-preview {
+    width: 794px !important;  /* tamanho real A4 */
+    height: 1123px !important; /* tamanho real A4 */
+    
+    transform-origin: top left;
+    margin: 0 auto 30px auto;
+    display: block;
+  }
+
+  #btnTemplateSelector, #download-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  #templateModal {
+    width: 90%;
+    left: 5%;
+    top: 10%;
+    transform: none;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <form id="cv-form">
+    <input type="file" accept="image/*" onchange="carregarImagem(event)">
+    <h2>Preencha seu CV</h2>
+
+    <label>Nome</label>
+    <input id="name" oninput="updatePreview('name')">
+
+    <label>Cargo</label>
+    <input id="position" oninput="updatePreview('position')">
+
+    <label>Telefone</label>
+    <div id="phone-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampo('phone')">+</button>
+
+    <label>Email</label>
+    <div id="email-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampo('email')">+</button>
+
+    <label>Endereço</label>
+    <div id="address-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampo('address')">+</button>
+
+    <label>Website</label>
+    <div id="website-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampo('website')">+</button>
+
+    <label>Perfil</label>
+    <textarea id="profile" oninput="updatePreview('profile')"></textarea>
+
+    <label>Experiência Profissional</label>
+    <textarea id="experience" oninput="updatePreview('experience')"></textarea>
+    <!-- Container para campos extras experiência -->
+    <div id="experience-extras-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampoExperiencia()">+</button>
+
+    <label>Formação</label>
+    <div id="education-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampo('education')">+</button>
+
+    <label>Habilidades Técnicas</label>
+    <div id="skills-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampo('skills')">+</button>
+
+    <label>Outras Habilidades</label>
+    <div id="other-skills-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampo('other-skills')">+</button>
+
+    <label>Idiomas</label>
+    <!-- Aqui a escolha do tipo de nível -->
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+      <span style="font-weight:bold;">Tipo de Nível:</span>
+      <label><input type="radio" name="nivelTipo" value="select" checked onchange="setIdiomaNivelTipo('select')"> Seletor</label>
+      <label><input type="radio" name="nivelTipo" value="range" onchange="setIdiomaNivelTipo('range')"> Barra</label>
+    </div>
+    <div id="languages-container"></div>
+    <button type="button" class="add-remove-btn" onclick="adicionarCampoIdioma()">+</button>
+
+    <label>Referência</label>
+    <textarea id="reference" oninput="updatePreview('reference')"></textarea>
+
+    <label>Disponibilidade</label>
+    <textarea id="availability" oninput="updatePreview('availability')"></textarea>
+
+    <div style="margin-top: 20px;">
+      <button type="button" class="button" id="btnTemplateSelector">Selecionar Template</button>
+      <button type="button" class="button" id="download-btn" onclick="downloadPDF()">Baixar PDF</button>
+    </div>
+  </form>
+
+  <div class="preview">
+    <div id="cv-preview"></div>
+  </div>
+
+  <div id="templateModal">
+    <h3>Escolha um Template:</h3>
+    <ul>
+      <li><button onclick="carregarTemplate('template1')">Template 1</button></li>
+      <li><button onclick="carregarTemplate('template2')">Template 2</button></li>
+      <li><button onclick="carregarTemplate('template3')">Template 3</button></li>
+      <li><button onclick="carregarTemplate('template4')">Template 4</button></li>
+      <li><button onclick="carregarTemplate('template5')">Template 5</button></li>
+    </ul>
+    <button onclick="document.getElementById('templateModal').style.display='none'">Fechar</button>
+  </div>
+
+  <div id="loading-msg">Gerando PDF, por favor aguarde...</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+  // Variável global para armazenar a imagem base64
+let imagemBase64 = null;
+
+// Global para controle do tipo de nível idioma
+let idiomaNivelTipo = 'select'; // 'select' ou 'range'
+
+function setIdiomaNivelTipo(tipo) {
+  idiomaNivelTipo = tipo;
+  recriarCamposIdiomas();
+  atualizarListaPreview('languages');
+}
+
+// Recria campos idiomas mantendo os valores atuais para aplicar o novo tipo
+function recriarCamposIdiomas() {
+  const container = document.getElementById("languages-container");
+  const valores = [];
+
+  container.querySelectorAll(".add-remove-field").forEach(div => {
+    const inputs = div.querySelectorAll("input, select");
+    const idioma = inputs[0]?.value || "";
+    let nivel;
+    if (idiomaNivelTipo === 'select') {
+      nivel = inputs[1]?.value || "Básico";
+    } else {
+      nivel = inputs[1]?.value || 0;
+    }
+    valores.push({ idioma, nivel });
+  });
+
+  container.innerHTML = "";
+
+  valores.forEach(v => adicionarCampoIdioma(v.idioma, v.nivel));
+}
+
+// Adiciona campo idioma + nível (select ou range) com botão remover
+function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
+  const container = document.getElementById("languages-container");
+
+  const div = document.createElement("div");
+  div.className = "add-remove-field";
+  div.style.gap = "10px";
+
+  // Input idioma
+  const inputIdioma = document.createElement("input");
+  inputIdioma.type = "text";
+  inputIdioma.placeholder = "Idioma";
+  inputIdioma.value = valorIdioma;
+  inputIdioma.oninput = () => atualizarListaPreview('languages');
+  inputIdioma.style.flex = "1";
+
+  // Campo nível
+  let nivelInput;
+  if (idiomaNivelTipo === 'select') {
+    nivelInput = document.createElement("select");
+    ["Básico", "Intermediário", "Fluente", "Nativo"].forEach(nivel => {
+      const option = document.createElement("option");
+      option.value = nivel;
+      option.textContent = nivel;
+      nivelInput.appendChild(option);
+    });
+    nivelInput.value = valorNivel || "Básico";
+    nivelInput.onchange = () => atualizarListaPreview('languages');
+    nivelInput.style.flex = "1";
+  } else {
+    nivelInput = document.createElement("input");
+    nivelInput.type = "range";
+    nivelInput.min = 0;
+    nivelInput.max = 4;
+    nivelInput.step = 1;
+    nivelInput.value = valorNivel !== null ? valorNivel : 0;
+    nivelInput.style.width = "150px";
+    nivelInput.oninput = () => atualizarListaPreview('languages');
+  }
+
+  // Botão remover
+  const btnRemover = document.createElement("button");
+  btnRemover.type = "button";
+  btnRemover.className = "add-remove-btn";
+  btnRemover.textContent = "-";
+  btnRemover.onclick = () => {
+    container.removeChild(div);
+    atualizarListaPreview('languages');
+  };
+
+  div.appendChild(inputIdioma);
+  div.appendChild(nivelInput);
+  div.appendChild(btnRemover);
+
+  container.appendChild(div);
+  atualizarListaPreview('languages');
+}
+
+function carregarTemplate(nome) {
+  fetch(`templates/${nome}.html`)
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("cv-preview").innerHTML = html;
+      aplicarTodosOsDados();
+      atualizarImagemPreview(); // Atualiza a imagem após trocar template
+    });
+  document.getElementById("templateModal").style.display = "none";
+}
+
+function carregarImagem(event) {
+  const arquivo = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    imagemBase64 = e.target.result; // guarda aqui
+    atualizarImagemPreview();
+  };
+  if (arquivo) reader.readAsDataURL(arquivo);
+}
+
+function atualizarImagemPreview() {
+  const img = document.getElementById('preview-foto');
+  if(img && imagemBase64) {
+    img.src = imagemBase64;
+  }
+}
+
+function updatePreview(id) {
+  const valor = document.getElementById(id).value.trim();
+  const preview = document.getElementById("preview-" + id);
+  const titulo = document.getElementById("preview-" + id + "-title");
+  if(preview) preview.innerText = valor;
+  if(titulo) titulo.style.display = valor ? "block" : "none";
+
+  if(id === 'experience') {
+    atualizarListaExperienciaExtrasPreview();
+  }
+}
+
+// --- Experiência adicional com Ano + Descrição ---
+function adicionarCampoExperiencia() {
+  const container = document.getElementById("experience-extras-container");
+
+  const div = document.createElement("div");
+  div.className = "add-remove-field";
+  div.style.gap = "10px";
+
+  const ano = document.createElement("input");
+  ano.type = "text";
+  ano.placeholder = "Ano";
+  ano.style.width = "80px";
+  ano.oninput = atualizarListaExperienciaExtrasPreview;
+
+  const descricao = document.createElement("textarea");
+  descricao.placeholder = "Detalhe adicional de experiência";
+  descricao.style.flex = "1";
+  descricao.oninput = atualizarListaExperienciaExtrasPreview;
+
+  const btnRemover = document.createElement("button");
+  btnRemover.type = "button";
+  btnRemover.className = "add-remove-btn";
+  btnRemover.textContent = "-";
+  btnRemover.onclick = () => {
+    container.removeChild(div);
+    atualizarListaExperienciaExtrasPreview();
+  };
+
+  div.appendChild(ano);
+  div.appendChild(descricao);
+  div.appendChild(btnRemover);
+  container.appendChild(div);
+  atualizarListaExperienciaExtrasPreview();
+}
+
+function atualizarListaExperienciaExtrasPreview() {
+  const container = document.getElementById("experience-extras-container");
+  const preview = document.getElementById("preview-experience-extras-list");
+  const titulo = document.getElementById("preview-experience-title");
+
+  if (!preview) return;
+  preview.innerHTML = "";
+  let temConteudo = false;
+
+  const divs = container.querySelectorAll(".add-remove-field");
+  divs.forEach(div => {
+    const ano = div.querySelector("input");
+    const descricao = div.querySelector("textarea");
+
+    if (descricao.value.trim()) {
+      const linha = document.createElement("div");
+      linha.style.display = "flex";
+      linha.style.justifyContent = "space-between";
+      linha.style.marginBottom = "5px";
+
+      const spanAno = document.createElement("span");
+      spanAno.textContent = ano.value.trim();
+      spanAno.style.fontWeight = "bold";
+      spanAno.style.width = "100px";
+
+      const spanTexto = document.createElement("span");
+      spanTexto.textContent = descricao.value.trim();
+      spanTexto.style.flex = "1";
+
+      linha.appendChild(spanAno);
+      linha.appendChild(spanTexto);
+      preview.appendChild(linha);
+
+      temConteudo = true;
+    }
+  });
+
+  // MOSTRAR título também se campo experiencia principal estiver preenchido
+  const experienciaPrincipal = document.getElementById("experience");
+  if(experienciaPrincipal && experienciaPrincipal.value.trim()) {
+    temConteudo = true;
+  }
+
+  if (titulo) titulo.style.display = temConteudo ? "block" : "none";
+}
+
+// --- Formação com Ano + Descrição ---
+function adicionarCampo(tipo) {
+  const container = document.getElementById(`${tipo}-container`);
+
+  // Se for o container 'education', cria input ano + input texto
+  if(tipo === 'education') {
+    const div = document.createElement("div");
+    div.className = "add-remove-field";
+    div.style.gap = "10px";
+
+    const ano = document.createElement("input");
+    ano.type = "text";
+    ano.placeholder = "Ano";
+    ano.style.width = "80px";
+    ano.oninput = () => atualizarListaPreview(tipo);
+
+    const descricao = document.createElement("input");
+    descricao.type = "text";
+    descricao.placeholder = "Descrição";
+    descricao.style.flex = "1";
+    descricao.oninput = () => atualizarListaPreview(tipo);
+
+    const btn = document.createElement("button");
+    btn.textContent = "-";
+    btn.type = "button";
+    btn.className = "add-remove-btn";
+    btn.onclick = () => {
+      container.removeChild(div);
+      atualizarListaPreview(tipo);
+    };
+
+    div.appendChild(ano);
+    div.appendChild(descricao);
+    div.appendChild(btn);
+    container.appendChild(div);
+    atualizarListaPreview(tipo);
+  } else {
+    // Para os demais campos só 1 input (como antes)
+    const div = document.createElement("div");
+    div.className = "add-remove-field";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.oninput = () => atualizarListaPreview(tipo);
+
+    const btn = document.createElement("button");
+    btn.textContent = "-";
+    btn.type = "button";
+    btn.className = "add-remove-btn";
+    btn.onclick = () => {
+      container.removeChild(div);
+      atualizarListaPreview(tipo);
+    };
+
+    div.appendChild(input);
+    div.appendChild(btn);
+    container.appendChild(div);
+    atualizarListaPreview(tipo);
+  }
+}
+
+function atualizarListaPreview(tipo) {
+  const container = document.getElementById(`${tipo}-container`);
+  const preview = document.getElementById(`preview-${tipo}-list`);
+  const titulo = document.getElementById(`preview-${tipo}-title`);
+  if (!preview) return;
+
+  preview.innerHTML = "";
+  let temConteudo = false;
+
+  if(tipo === 'education') {
+    // Para formação, percorre as divs e pega ano + descrição
+    const divs = container.querySelectorAll(".add-remove-field");
+    divs.forEach(div => {
+      const inputs = div.querySelectorAll("input");
+      const ano = inputs[0]?.value.trim() || "";
+      const descricao = inputs[1]?.value.trim() || "";
+
+      if (descricao) {
+        const linha = document.createElement("div");
+        linha.style.display = "flex";
+        linha.style.justifyContent = "space-between";
+        linha.style.marginBottom = "5px";
+
+        const spanAno = document.createElement("span");
+        spanAno.textContent = ano;
+        spanAno.style.fontWeight = "bold";
+        spanAno.style.width = "100px";
+
+        const spanTexto = document.createElement("span");
+        spanTexto.textContent = descricao;
+        spanTexto.style.flex = "1";
+
+        linha.appendChild(spanAno);
+        linha.appendChild(spanTexto);
+        preview.appendChild(linha);
+
+        temConteudo = true;
+      }
+    });
+  } else if(tipo === 'languages') {
+    // Idiomas: mostrar idioma + nível (texto ou barra)
+    const divs = container.querySelectorAll(".add-remove-field");
+    divs.forEach(div => {
+      const inputs = div.querySelectorAll("input, select");
+      const idioma = inputs[0]?.value.trim() || "";
+      let nivel = inputs[1]?.value;
+
+      if(idioma) {
+        const linha = document.createElement("div");
+        linha.style.display = "flex";
+        linha.style.alignItems = "center";
+        linha.style.marginBottom = "6px";
+
+        const spanIdioma = document.createElement("span");
+        spanIdioma.textContent = idioma;
+        spanIdioma.style.fontWeight = "bold";
+        spanIdioma.style.width = "150px";
+
+        linha.appendChild(spanIdioma);
+
+        if (idiomaNivelTipo === 'select') {
+          // Mostrar nível como texto
+          const spanNivel = document.createElement("span");
+          spanNivel.textContent = nivel;
+          spanNivel.style.flex = "1";
+          linha.appendChild(spanNivel);
+        } else {
+          // Mostrar nível como barra horizontal (0 a 4)
+          const barraContainer = document.createElement("div");
+          barraContainer.className = "nivel-barra-container";
+
+          const barraFundo = document.createElement("div");
+          barraFundo.className = "nivel-barra-fundo";
+
+          const barraPreenchida = document.createElement("div");
+          barraPreenchida.className = "nivel-barra-preenchida";
+
+          // Calcular largura percentual da barra (0 a 4)
+          const larguraPerc = Math.min(Math.max(parseInt(nivel), 0), 4) * 25;
+          barraPreenchida.style.width = larguraPerc + "%";
+
+          barraFundo.appendChild(barraPreenchida);
+          barraContainer.appendChild(barraFundo);
+          linha.appendChild(barraContainer);
+        }
+
+        preview.appendChild(linha);
+        temConteudo = true;
+      }
+    });
+  } else {
+    // Para outros campos, lista normal com ícones
+    const inputs = container.querySelectorAll("input");
+    inputs.forEach(input => {
+      if (input.value.trim()) {
+        const li = document.createElement("li");
+        let icon = "• ";
+        if (tipo === "phone") icon = "📞 ";
+        else if (tipo === "email") icon = "✉️ ";
+        else if (tipo === "address") icon = "🏠 ";
+        else if (tipo === "website") icon = "🌐 ";
+        else if (tipo === "skills") icon = "⚙️ ";
+        else if (tipo === "other-skills") icon = "⭐ ";
+        li.textContent = icon + input.value;
+        preview.appendChild(li);
+        temConteudo = true;
+      }
+    });
+  }
+
+  if (titulo) titulo.style.display = temConteudo ? "block" : "none";
+}
+
+function aplicarTodosOsDados() {
+  updatePreview('name');
+  updatePreview('position');
+  updatePreview('profile');
+  updatePreview('experience');
+  updatePreview('reference');
+  updatePreview('availability');  // Para o campo disponibilidade
+  atualizarListaPreview('phone');
+  atualizarListaPreview('email');
+  atualizarListaPreview('address');
+  atualizarListaPreview('website');
+  atualizarListaPreview('education');
+  atualizarListaPreview('skills');
+  atualizarListaPreview('other-skills');
+  atualizarListaPreview('languages');
+  atualizarListaExperienciaExtrasPreview();
+}
+
+function downloadPDF() {
+  window.scrollTo(0, 0);
+
+  const loading = document.getElementById("loading-msg");
+  const button = document.getElementById("download-btn");
+
+  loading.style.display = "block";
+  button.disabled = true;
+
+  setTimeout(() => {
+    const element = document.getElementById("cv-preview");
+
+    html2pdf().set({
+      margin: [0, 0, 0, 0],
+      filename: "cv.pdf",
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: {
+        scale: 2,
+        scrollY: 0,
+        useCORS: true
+      },
+      jsPDF: {
+        unit: "px",
+        format: [794, 1123],
+        orientation: "portrait"
+      }
+    }).from(element).save().then(() => {
+      loading.style.display = "none";
+      button.disabled = false;
+    });
+  }, 300);
+}
+
+window.addEventListener("DOMContentLoaded", function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const template = urlParams.get('template') || 'template1';
+  carregarTemplate(template);
+});
+
+// No final do seu script, dentro do DOMContentLoaded, ou diretamente no script:
+document.getElementById("btnTemplateSelector").addEventListener("click", () => {
+  document.getElementById("templateModal").style.display = "block";
+});
+
+</script>
+
+
+</body>
+</html>
