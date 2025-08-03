@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Preencha seu formulario</title>
+  <title>Preencha o seu formulário</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
@@ -86,14 +86,21 @@
       top: 20%;
       left: 50%;
       transform: translateX(-50%);
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 15px;
-      z-index: 1000;
+      
+      border: 1px solid #18151570;
+      border-radius: 20px;
+      z-index: 9999;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      background: rgb(221, 218, 218); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      width: 60vw;
+      
     }
     #templateModal h3 {
       margin-top: 0;
+      text-align: center;
     }
     #templateModal ul {
       list-style: none;
@@ -166,52 +173,92 @@
       border-radius: 6px;
       transition: width 0.3s ease;
     }
-@media screen and (max-width: 768px) {
-  body {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    margin: 0;
-    padding: 0;
-  }
+    #mobile-preview-btn {
+        display: block;
+        margin-top: 20px;
+        background: #2f3e52;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        border-radius: 4px;
+        cursor: pointer;
+      }
 
-  form {
-    width: 100% !important;
-    height: auto;
-    overflow-y: visible;
-    padding: 15px;
-    box-sizing: border-box;
-  }
-
-  .preview {
-    width: 100% !important;
-    overflow-x: auto;
-    
-    box-sizing: border-box;
-    order: 2; /* força aparecer abaixo do form */
-  }
-
-  #cv-preview {
-    width: 794px !important;  /* tamanho real A4 */
-    height: 1123px !important; /* tamanho real A4 */
-    
-    transform-origin: top left;
-    margin: 0 auto 30px auto;
-    display: block;
-  }
-
-  #btnTemplateSelector, #download-btn {
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  #templateModal {
-    width: 90%;
-    left: 5%;
-    top: 10%;
-    transform: none;
-  }
+      .mobile-preview-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px;
 }
+
+.mobile-preview-buttons button {
+  background: #2f3e52;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/*nova funcao de escolha de templates*/
+.template-thumb {
+    width: 150px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 8px;
+  }
+
+  .template-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  #prevBtn, #nextBtn {
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  #prevBtn:hover, #nextBtn:hover {
+    background: rgba(255, 217, 0, 0.87);
+  }
+
+        /* Adições para Responsividade */
+    @media (max-width: 768px) {
+      body {
+        display: block;
+        overflow-y: auto;
+        height: auto;
+      }
+      form {
+        width: 100%;
+        height: auto;
+      }
+    
+      .preview {
+        display: none;
+      }
+      #cv-preview {
+        display: none;
+      }
+
+      #mobile-preview-btn {
+        display: block;
+        margin-top: 20px;
+        background: #2f3e52;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+    }
 
   </style>
 </head>
@@ -283,43 +330,84 @@
     <div style="margin-top: 20px;">
       <button type="button" class="button" id="btnTemplateSelector">Selecionar Template</button>
       <button type="button" class="button" id="download-btn" onclick="downloadPDF()">Baixar PDF</button>
+      <button type="button" class="button" id="translate-btn" onclick="alternarIdioma()">Traduzir para Inglês</button>
+      <button type="button" class="button" id="btnCorrigirAcentos">Corrigir Acentos</button>
+      <input type="color" id="colorPicker" value="#2f3e52" style="width:40px; height:40px; border:none; cursor:pointer; margin-left:10px;" onchange="trocarCor(this.value)">
     </div>
+
+    <div id="mobile-preview-btn" onclick="abrirPreviewMobile()">Ver Pré-visualização</div>
   </form>
 
   <div class="preview">
     <div id="cv-preview"></div>
   </div>
 
-  <div id="templateModal">
-    <h3>Escolha um Template:</h3>
-    <ul>
-      <li><button onclick="carregarTemplate('template1')">Template 1</button></li>
-      <li><button onclick="carregarTemplate('template2')">Template 2</button></li>
-      <li><button onclick="carregarTemplate('template3')">Template 3</button></li>
-      <li><button onclick="carregarTemplate('template4')">Template 4</button></li>
-      <li><button onclick="carregarTemplate('template5')">Template 5</button></li>
-    </ul>
-    <button onclick="document.getElementById('templateModal').style.display='none'">Fechar</button>
+  <!-- Página de Pré-visualização Mobile -->
+  <div id="mobile-preview-page" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; overflow:auto;">
+    <div style="background:#2f3e52; color:white; padding:10px; text-align:center; cursor:pointer;" onclick="fecharPreviewMobile()">Voltar ao Formulário</div>
+    <div id="cv-preview-mobile" style="display:flex; justify-content:center; align-items:flex-start; padding:10px;"></div>
+
+    <div class="mobile-preview-buttons">
+    <input type="color" class="button" id="colorPicker" value="#2f3e52" style="width:40px; height:40px; border:none; cursor:pointer; margin-left:10px;" onchange="trocarCor(this.value)">
+    <button class="button" onclick="document.getElementById('templateModal').style.display='block'">Selecionar Template</button>
+    <button class="button" onclick="downloadPDFMobile()">Baixar PDF</button>
+    <button type="button" class="button" id="translate-btn" onclick="alternarIdioma()">Traduzir para Inglês</button>
+    <button type="button" class="button" id="btnCorrigirAcentos">Corrigir Acentos</button>
+    
+    </div>
+
   </div>
+
+  <div id="templateModal">
+  
+    <h3>Escolha um Template:</h3>
+    
+    <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+      <button id="prevBtn" style="position: absolute; left: -40px; z-index: 2; font-size: 24px;">&#9664;</button>
+      
+      <div id="templateCarousel" style="display: flex; overflow: hidden; width: 90%; scroll-behavior: smooth;">
+        <div style="display: flex; gap: 10px; transition: transform 0.3s;">
+          <img src="img/template1.png" alt="Template 1" onclick="carregarTemplate('template1')" class="template-thumb">
+          <img src="img/template2.png" alt="Template 2" onclick="carregarTemplate('template2')" class="template-thumb">
+          <img src="img/template3.png" alt="Template 3" onclick="carregarTemplate('template3')" class="template-thumb">
+          <img src="img/template4.png" alt="Template 4" onclick="carregarTemplate('template4')" class="template-thumb">
+          <img src="img/template5.png" alt="Template 5" onclick="carregarTemplate('template5')" class="template-thumb">
+          <img src="img/template6.png" alt="Template 6" onclick="carregarTemplate('template6')" class="template-thumb">
+          <img src="img/template7.png" alt="Template 7" onclick="carregarTemplate('template7')" class="template-thumb">
+        </div>
+      </div>
+      
+      <button id="nextBtn" style="position: absolute; right: -40px; z-index: 2; font-size: 24px;">&#9654;</button>
+    </div>
+
+    <button onclick="document.getElementById('templateModal').style.display='none'" style="margin-top: 20px;">Fechar</button>
+  
+</div>
 
   <div id="loading-msg">Gerando PDF, por favor aguarde...</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <script>
-  // Variável global para armazenar a imagem base64
+ 
+
+<script>
+
+// Variável global para armazenar a imagem base64
 let imagemBase64 = null;
 
-// Global para controle do tipo de nível idioma
+// Controle do tipo de nível idioma
 let idiomaNivelTipo = 'select'; // 'select' ou 'range'
 
+// Template atual selecionado global
+let templateAtual = 'template1';
+
+// --- Idiomas ---
 function setIdiomaNivelTipo(tipo) {
   idiomaNivelTipo = tipo;
   recriarCamposIdiomas();
   atualizarListaPreview('languages');
 }
 
-// Recria campos idiomas mantendo os valores atuais para aplicar o novo tipo
 function recriarCamposIdiomas() {
   const container = document.getElementById("languages-container");
   const valores = [];
@@ -327,21 +415,14 @@ function recriarCamposIdiomas() {
   container.querySelectorAll(".add-remove-field").forEach(div => {
     const inputs = div.querySelectorAll("input, select");
     const idioma = inputs[0]?.value || "";
-    let nivel;
-    if (idiomaNivelTipo === 'select') {
-      nivel = inputs[1]?.value || "Básico";
-    } else {
-      nivel = inputs[1]?.value || 0;
-    }
+    let nivel = idiomaNivelTipo === 'select' ? (inputs[1]?.value || "Básico") : (inputs[1]?.value || 0);
     valores.push({ idioma, nivel });
   });
 
   container.innerHTML = "";
-
   valores.forEach(v => adicionarCampoIdioma(v.idioma, v.nivel));
 }
 
-// Adiciona campo idioma + nível (select ou range) com botão remover
 function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
   const container = document.getElementById("languages-container");
 
@@ -349,7 +430,6 @@ function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
   div.className = "add-remove-field";
   div.style.gap = "10px";
 
-  // Input idioma
   const inputIdioma = document.createElement("input");
   inputIdioma.type = "text";
   inputIdioma.placeholder = "Idioma";
@@ -357,7 +437,6 @@ function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
   inputIdioma.oninput = () => atualizarListaPreview('languages');
   inputIdioma.style.flex = "1";
 
-  // Campo nível
   let nivelInput;
   if (idiomaNivelTipo === 'select') {
     nivelInput = document.createElement("select");
@@ -381,7 +460,6 @@ function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
     nivelInput.oninput = () => atualizarListaPreview('languages');
   }
 
-  // Botão remover
   const btnRemover = document.createElement("button");
   btnRemover.type = "button";
   btnRemover.className = "add-remove-btn";
@@ -399,47 +477,66 @@ function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
   atualizarListaPreview('languages');
 }
 
+// --- Carregar template (desktop e mobile) ---
 function carregarTemplate(nome) {
+  templateAtual = nome;
+
   fetch(`templates/${nome}.html`)
-    .then(res => res.text())
+    .then(res => {
+      if (!res.ok) throw new Error(`Status HTTP ${res.status}`);
+      return res.text();
+    })
     .then(html => {
       document.getElementById("cv-preview").innerHTML = html;
+      const mobilePreview = document.getElementById("cv-preview-mobile");
+      if (mobilePreview) mobilePreview.innerHTML = html;
       aplicarTodosOsDados();
-      atualizarImagemPreview(); // Atualiza a imagem após trocar template
+      atualizarImagemPreview();
+
+      // 👇 Forçar ocultar a preview no mobile após carregar template
+      if (window.innerWidth <= 768) {
+        document.querySelector('.preview').style.display = 'none';
+      }
+    })
+    .catch(err => {
+      console.error("Erro ao carregar template:", err);
+      alert("Falha ao carregar template. Veja console.");
     });
+
   document.getElementById("templateModal").style.display = "none";
 }
 
+// --- Imagem do usuário ---
 function carregarImagem(event) {
   const arquivo = event.target.files[0];
   const reader = new FileReader();
-  reader.onload = function(e) {
-    imagemBase64 = e.target.result; // guarda aqui
+  reader.onload = function (e) {
+    imagemBase64 = e.target.result;
     atualizarImagemPreview();
   };
   if (arquivo) reader.readAsDataURL(arquivo);
 }
 
 function atualizarImagemPreview() {
-  const img = document.getElementById('preview-foto');
-  if(img && imagemBase64) {
-    img.src = imagemBase64;
-  }
+  document.querySelectorAll('#preview-foto').forEach(img => {
+    if (img && imagemBase64) img.src = imagemBase64;
+  });
 }
 
+// --- Atualizar previews ---
 function updatePreview(id) {
   const valor = document.getElementById(id).value.trim();
-  const preview = document.getElementById("preview-" + id);
-  const titulo = document.getElementById("preview-" + id + "-title");
-  if(preview) preview.innerText = valor;
-  if(titulo) titulo.style.display = valor ? "block" : "none";
+  document.querySelectorAll("#preview-" + id).forEach(p => {
+    if (p) p.innerText = valor;
+  });
+  document.querySelectorAll("#preview-" + id + "-title").forEach(t => {
+    if (t) t.style.display = valor ? "block" : "none";
+  });
 
-  if(id === 'experience') {
-    atualizarListaExperienciaExtrasPreview();
-  }
+  if (id === 'experience') atualizarListaExperienciaExtrasPreview();
 }
 
-// --- Experiência adicional com Ano + Descrição ---
+// --- Experiência adicional ---
 function adicionarCampoExperiencia() {
   const container = document.getElementById("experience-extras-container");
 
@@ -471,16 +568,16 @@ function adicionarCampoExperiencia() {
   div.appendChild(descricao);
   div.appendChild(btnRemover);
   container.appendChild(div);
+
   atualizarListaExperienciaExtrasPreview();
 }
 
 function atualizarListaExperienciaExtrasPreview() {
   const container = document.getElementById("experience-extras-container");
-  const preview = document.getElementById("preview-experience-extras-list");
-  const titulo = document.getElementById("preview-experience-title");
+  const previews = document.querySelectorAll("#preview-experience-extras-list");
+  const titulos = document.querySelectorAll("#preview-experience-title");
 
-  if (!preview) return;
-  preview.innerHTML = "";
+  previews.forEach(preview => preview.innerHTML = "");
   let temConteudo = false;
 
   const divs = container.querySelectorAll(".add-remove-field");
@@ -505,27 +602,25 @@ function atualizarListaExperienciaExtrasPreview() {
 
       linha.appendChild(spanAno);
       linha.appendChild(spanTexto);
-      preview.appendChild(linha);
 
+      previews.forEach(preview => preview.appendChild(linha.cloneNode(true)));
       temConteudo = true;
     }
   });
 
-  // MOSTRAR título também se campo experiencia principal estiver preenchido
   const experienciaPrincipal = document.getElementById("experience");
-  if(experienciaPrincipal && experienciaPrincipal.value.trim()) {
-    temConteudo = true;
-  }
+  if (experienciaPrincipal && experienciaPrincipal.value.trim()) temConteudo = true;
 
-  if (titulo) titulo.style.display = temConteudo ? "block" : "none";
+  titulos.forEach(titulo => {
+    titulo.style.display = temConteudo ? "block" : "none";
+  });
 }
 
-// --- Formação com Ano + Descrição ---
+// --- Campos adicionais ---
 function adicionarCampo(tipo) {
   const container = document.getElementById(`${tipo}-container`);
 
-  // Se for o container 'education', cria input ano + input texto
-  if(tipo === 'education') {
+  if (tipo === 'education') {
     const div = document.createElement("div");
     div.className = "add-remove-field";
     div.style.gap = "10px";
@@ -557,7 +652,6 @@ function adicionarCampo(tipo) {
     container.appendChild(div);
     atualizarListaPreview(tipo);
   } else {
-    // Para os demais campos só 1 input (como antes)
     const div = document.createElement("div");
     div.className = "add-remove-field";
 
@@ -581,17 +675,17 @@ function adicionarCampo(tipo) {
   }
 }
 
+// --- Atualizar lista preview ---
 function atualizarListaPreview(tipo) {
   const container = document.getElementById(`${tipo}-container`);
-  const preview = document.getElementById(`preview-${tipo}-list`);
-  const titulo = document.getElementById(`preview-${tipo}-title`);
-  if (!preview) return;
+  const previews = document.querySelectorAll(`#preview-${tipo}-list`);
+  const titulos = document.querySelectorAll(`#preview-${tipo}-title`);
+  if (!previews.length) return;
 
-  preview.innerHTML = "";
+  previews.forEach(preview => preview.innerHTML = "");
   let temConteudo = false;
 
-  if(tipo === 'education') {
-    // Para formação, percorre as divs e pega ano + descrição
+  if (tipo === 'education') {
     const divs = container.querySelectorAll(".add-remove-field");
     divs.forEach(div => {
       const inputs = div.querySelectorAll("input");
@@ -615,20 +709,19 @@ function atualizarListaPreview(tipo) {
 
         linha.appendChild(spanAno);
         linha.appendChild(spanTexto);
-        preview.appendChild(linha);
 
+        previews.forEach(preview => preview.appendChild(linha.cloneNode(true)));
         temConteudo = true;
       }
     });
-  } else if(tipo === 'languages') {
-    // Idiomas: mostrar idioma + nível (texto ou barra)
+  } else if (tipo === 'languages') {
     const divs = container.querySelectorAll(".add-remove-field");
     divs.forEach(div => {
       const inputs = div.querySelectorAll("input, select");
       const idioma = inputs[0]?.value.trim() || "";
       let nivel = inputs[1]?.value;
 
-      if(idioma) {
+      if (idioma) {
         const linha = document.createElement("div");
         linha.style.display = "flex";
         linha.style.alignItems = "center";
@@ -638,17 +731,14 @@ function atualizarListaPreview(tipo) {
         spanIdioma.textContent = idioma;
         spanIdioma.style.fontWeight = "bold";
         spanIdioma.style.width = "150px";
-
         linha.appendChild(spanIdioma);
 
         if (idiomaNivelTipo === 'select') {
-          // Mostrar nível como texto
           const spanNivel = document.createElement("span");
           spanNivel.textContent = nivel;
           spanNivel.style.flex = "1";
           linha.appendChild(spanNivel);
         } else {
-          // Mostrar nível como barra horizontal (0 a 4)
           const barraContainer = document.createElement("div");
           barraContainer.className = "nivel-barra-container";
 
@@ -658,7 +748,6 @@ function atualizarListaPreview(tipo) {
           const barraPreenchida = document.createElement("div");
           barraPreenchida.className = "nivel-barra-preenchida";
 
-          // Calcular largura percentual da barra (0 a 4)
           const larguraPerc = Math.min(Math.max(parseInt(nivel), 0), 4) * 25;
           barraPreenchida.style.width = larguraPerc + "%";
 
@@ -667,15 +756,15 @@ function atualizarListaPreview(tipo) {
           linha.appendChild(barraContainer);
         }
 
-        preview.appendChild(linha);
+        previews.forEach(preview => preview.appendChild(linha.cloneNode(true)));
         temConteudo = true;
       }
     });
   } else {
-    // Para outros campos, lista normal com ícones
     const inputs = container.querySelectorAll("input");
     inputs.forEach(input => {
-      if (input.value.trim()) {
+      const val = input.value.trim();
+      if (val) {
         const li = document.createElement("li");
         let icon = "• ";
         if (tipo === "phone") icon = "📞 ";
@@ -684,23 +773,24 @@ function atualizarListaPreview(tipo) {
         else if (tipo === "website") icon = "🌐 ";
         else if (tipo === "skills") icon = "⚙️ ";
         else if (tipo === "other-skills") icon = "⭐ ";
-        li.textContent = icon + input.value;
-        preview.appendChild(li);
+        li.textContent = icon + val;
+        previews.forEach(preview => preview.appendChild(li.cloneNode(true)));
         temConteudo = true;
       }
     });
   }
 
-  if (titulo) titulo.style.display = temConteudo ? "block" : "none";
+  titulos.forEach(t => t.style.display = temConteudo ? "block" : "none");
 }
 
+// --- Aplica todos os dados no preview ---
 function aplicarTodosOsDados() {
   updatePreview('name');
   updatePreview('position');
   updatePreview('profile');
   updatePreview('experience');
   updatePreview('reference');
-  updatePreview('availability');  // Para o campo disponibilidade
+  updatePreview('availability');
   atualizarListaPreview('phone');
   atualizarListaPreview('email');
   atualizarListaPreview('address');
@@ -712,6 +802,7 @@ function aplicarTodosOsDados() {
   atualizarListaExperienciaExtrasPreview();
 }
 
+// --- Download PDF (desktop) ---
 function downloadPDF() {
   window.scrollTo(0, 0);
 
@@ -745,19 +836,271 @@ function downloadPDF() {
   }, 300);
 }
 
+// --- Download PDF (mobile) ---
+function downloadPDFMobile() {
+  const el = document.getElementById("cv-preview-mobile");
+  const loading = document.getElementById("loading-msg");
+
+  const prevDisplay = el.style.display;
+  el.style.display = "block";  // garantir visibilidade
+
+  loading.style.display = "block";
+
+  html2pdf().set({
+    margin: [0, 0, 0, 0],
+    filename: "cv.pdf",
+    image: { type: "jpeg", quality: 1 },
+    html2canvas: { scale: 2, scrollY: 0, useCORS: true },
+    jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" }
+  }).from(el).save().then(() => {
+    el.style.display = prevDisplay;
+    loading.style.display = "none";
+  });
+}
+
+// --- Abrir preview mobile ---
+function abrirPreviewMobile() {
+  document.getElementById('mobile-preview-page').style.display = 'block';
+}
+
+// --- Fechar preview mobile ---
+function fecharPreviewMobile() {
+  document.getElementById('mobile-preview-page').style.display = 'none';
+}
+
+// --- Eventos ---
+document.getElementById("btnTemplateSelector").addEventListener("click", () => {
+  document.getElementById("templateModal").style.display = "block";
+});
+
+// --- Carrega template ao iniciar página ---
 window.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const template = urlParams.get('template') || 'template1';
   carregarTemplate(template);
 });
 
-// No final do seu script, dentro do DOMContentLoaded, ou diretamente no script:
-document.getElementById("btnTemplateSelector").addEventListener("click", () => {
-  document.getElementById("templateModal").style.display = "block";
-});
+//trocar de cor
+function trocarCor(corHex) {
+  document.documentElement.style.setProperty('--main-color', corHex);
+}
+
+</script>
+<script>
+  //traduzir documento
+let idiomaAtual = 'pt'; // pt ou en
+
+const dicionarioTitulos = {
+  'pt': {
+    'profile': 'Perfil',
+    'experience': 'Experiência Profissional',
+    'education': 'Formação',
+    'skills': 'Habilidades Técnicas',
+    'other-skills': 'Outras Habilidades',
+    'languages': 'Idiomas',
+    'reference': 'Referência',
+    'availability': 'Disponibilidade',
+    'contacts': 'Contactos',
+    'Básico': 'Básico',
+    'Intermediário': 'Intermediário',
+    'Fluente': 'Fluente',
+    'Nativo': 'Nativo'
+  },
+  'en': {
+    'profile': 'Profile',
+    'experience': 'Professional Experience',
+    'education': 'Education',
+    'skills': 'Technical Skills',
+    'other-skills': 'Other Skills',
+    'languages': 'Languages',
+    'reference': 'Reference',
+    'availability': 'Availability',
+    'contacts': 'Contacts',
+    'Básico': 'Basic',
+    'Intermediário': 'Intermediate',
+    'Fluente': 'Fluent',
+    'Nativo': 'Native'
+  }
+};
+
+async function traduzirTextoGoogle(texto, de, para) {
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${de}&tl=${para}&dt=t&q=${encodeURIComponent(texto)}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data[0]?.[0]?.[0] || texto;
+}
+
+async function traduzirCamposCV() {
+  const campos = ['name', 'position', 'profile', 'experience', 'reference', 'availability'];
+  for (let id of campos) {
+    const el = document.getElementById(id);
+    if (el && el.value.trim() !== '') {
+      const textoTraduzido = await traduzirTextoGoogle(el.value.trim(), idiomaAtual, idiomaAtual === 'pt' ? 'en' : 'pt');
+      el.value = textoTraduzido;
+      updatePreview(id);
+    }
+  }
+
+  // Campos Dinâmicos (Educação, Skills, etc.)
+  const containers = ['education', 'skills', 'other-skills', 'phone', 'email', 'address', 'website'];
+  for (let tipo of containers) {
+    const container = document.getElementById(`${tipo}-container`);
+    if (container) {
+      const inputs = container.querySelectorAll('input');
+      for (let input of inputs) {
+        if (input.value.trim() !== '') {
+          const textoTraduzido = await traduzirTextoGoogle(input.value.trim(), idiomaAtual, idiomaAtual === 'pt' ? 'en' : 'pt');
+          input.value = textoTraduzido;
+        }
+      }
+      atualizarListaPreview(tipo);
+    }
+  }
+
+  // Idiomas (Nome do Idioma)
+  const languages = document.getElementById('languages-container').querySelectorAll('.add-remove-field input[type="text"]');
+  for (let input of languages) {
+    if (input.value.trim() !== '') {
+      const textoTraduzido = await traduzirTextoGoogle(input.value.trim(), idiomaAtual, idiomaAtual === 'pt' ? 'en' : 'pt');
+      input.value = textoTraduzido;
+    }
+  }
+
+  // Traduzir Níveis (Básico, Intermediário, etc.)
+  const niveis = document.getElementById('languages-container').querySelectorAll('select');
+  niveis.forEach(select => {
+    const nivelAtual = select.value;
+    const novoNivel = dicionarioTitulos[idiomaAtual === 'pt' ? 'en' : 'pt'][nivelAtual];
+    if (novoNivel) select.value = novoNivel;
+  });
+
+  atualizarListaPreview('languages');
+
+  // Campos Extras Experiência
+  const experienceExtras = document.getElementById('experience-extras-container').querySelectorAll('textarea');
+  for (let textarea of experienceExtras) {
+    if (textarea.value.trim() !== '') {
+      const textoTraduzido = await traduzirTextoGoogle(textarea.value.trim(), idiomaAtual, idiomaAtual === 'pt' ? 'en' : 'pt');
+      textarea.value = textoTraduzido;
+    }
+  }
+  atualizarListaExperienciaExtrasPreview();
+
+  // Agora traduzir os TÍTULOS da pré-visualização
+  traduzirTitulosPreview();
+}
+
+function traduzirTitulosPreview() {
+  const titulosKeys = ['profile', 'experience', 'education', 'skills', 'other-skills', 'languages', 'reference', 'availability', 'contacts'];
+  titulosKeys.forEach(chave => {
+    document.querySelectorAll(`#preview-${chave}-title`).forEach(el => {
+      el.textContent = dicionarioTitulos[idiomaAtual === 'pt' ? 'en' : 'pt'][chave];
+    });
+  });
+
+  // Atualizar níveis nas barras se for barra de nível
+  const bars = document.querySelectorAll('#languages-container select');
+  bars.forEach(select => {
+    const options = select.options;
+    for (let i = 0; i < options.length; i++) {
+      const val = options[i].value;
+      const novaLabel = dicionarioTitulos[idiomaAtual === 'pt' ? 'en' : 'pt'][val];
+      if (novaLabel) options[i].textContent = novaLabel;
+    }
+  });
+}
+
+async function alternarIdioma() {
+  const botao = event.target;
+  botao.textContent = 'Traduzindo...';
+  botao.disabled = true;
+
+  await traduzirCamposCV();
+
+  idiomaAtual = idiomaAtual === 'pt' ? 'en' : 'pt';
+  botao.textContent = idiomaAtual === 'pt' ? 'Traduzir para Inglês' : 'Traduzir para Português';
+  botao.disabled = false;
+}
 
 </script>
 
+<script>
+document.getElementById('btnCorrigirAcentos').addEventListener('click', async () => {
+  const botao = document.getElementById('btnCorrigirAcentos');
+  botao.disabled = true;
+  botao.textContent = 'Corrigindo...';
+
+  await corrigirCamposCV2x();
+
+  botao.disabled = false;
+  botao.textContent = 'Corrigir Acentos';
+});
+
+async function corrigirCamposCV2x() {
+  const campos = ['name', 'position', 'profile', 'experience', 'reference', 'availability'];
+  for (let id of campos) {
+    const el = document.getElementById(id);
+    if (el && el.value.trim() !== '') {
+      // 1ª tradução: pt → en
+      let textoIntermediario = await traduzirTextoGoogle(el.value.trim(), 'pt', 'en');
+      // 2ª tradução: en → pt
+      const textoCorrigido = await traduzirTextoGoogle(textoIntermediario, 'en', 'pt');
+      el.value = textoCorrigido;
+      updatePreview(id);
+    }
+  }
+
+  const containers = ['education', 'skills', 'other-skills', 'phone', 'email', 'address', 'website'];
+  for (let tipo of containers) {
+    const container = document.getElementById(`${tipo}-container`);
+    if (container) {
+      const inputs = container.querySelectorAll('input');
+      for (let input of inputs) {
+        if (input.value.trim() !== '') {
+          let textoIntermediario = await traduzirTextoGoogle(input.value.trim(), 'pt', 'en');
+          const textoCorrigido = await traduzirTextoGoogle(textoIntermediario, 'en', 'pt');
+          input.value = textoCorrigido;
+        }
+      }
+      atualizarListaPreview(tipo);
+    }
+  }
+
+  const languages = document.getElementById('languages-container').querySelectorAll('.add-remove-field input[type="text"]');
+  for (let input of languages) {
+    if (input.value.trim() !== '') {
+      let textoIntermediario = await traduzirTextoGoogle(input.value.trim(), 'pt', 'en');
+      const textoCorrigido = await traduzirTextoGoogle(textoIntermediario, 'en', 'pt');
+      input.value = textoCorrigido;
+    }
+  }
+
+  atualizarListaPreview('languages');
+
+  const experienceExtras = document.getElementById('experience-extras-container').querySelectorAll('textarea');
+  for (let textarea of experienceExtras) {
+    if (textarea.value.trim() !== '') {
+      let textoIntermediario = await traduzirTextoGoogle(textarea.value.trim(), 'pt', 'en');
+      const textoCorrigido = await traduzirTextoGoogle(textoIntermediario, 'en', 'pt');
+      textarea.value = textoCorrigido;
+    }
+  }
+  atualizarListaExperienciaExtrasPreview();
+}
+</script>
+<script>
+  //template modal nova funcao
+  const carousel = document.getElementById('templateCarousel');
+  const scrollAmount = 160;
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  });
+</script>
 
 </body>
 </html>

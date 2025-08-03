@@ -3,170 +3,136 @@
 <head>
   <meta charset="UTF-8" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-      width: 100%;
-      height: 100%;
+      margin: 0; padding: 0; height: 100%; width: 100%;
       font-family: 'Montserrat', sans-serif;
-      background: #f9f9f9;
       overflow-y: scroll;
-      
+    
     }
+
+    :root {
+  --main-color: #2f3e52;
+  --text-light: white;
+  --text-dark: black;
+   }
+
+
     .preview {
       width: 794px;
       height: 1123px;
-      background: #fff;
-      border: 1px solid #ddd;
-      
-      color: #333;
-      
-    }
-    
-    .personal{
-        background-color: #004a99;
-        color: white;
-        text-align: center;
-        text-transform: uppercase;
-        padding: 20px;
-    }
-    /* Cabeçalho */
-    .header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 3px solid #007bff;
-      padding-bottom: 10px;
-      padding: 20px;
-      background-color: #004a99;
-      color: white;
-    }
-    .header-left {
-      flex: 1;
       display: block;
-      width: 20%;
-
-    }
-    .header-left h1 {
-      font-size: 30px;
-      font-weight: 700;
-      color: #222;
-    }
-    .header-left h2 {
-      font-size: 18px;
-      font-weight: 500;
-      color: #007bff;
-      margin-top: 5px;
-    }
-    .header-right{
-      width: 80%;
-      display: flex;
-      align-items: first baseline;
-      gap: 50px;
-    }
-    .header-left img {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #007bff;
-    }
-
-    /* Corpo com duas colunas */
-    .content {
+      box-sizing: border-box;
       
-      width: 100%;
-      flex: 1;
-      display: flex;
-      
-      height: 100%;
     }
-
-    /* Coluna esquerda */
     .left {
       width: 35%;
+      height: 1123px;
+      background: var(--text-light);
+      color: #002244;
+      padding: 20px;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      font-size: 14px;
-      color: white;
-      box-sizing: border-box;
-      background-color: #00499762;
-      height: 100%;
-      padding: 25px 10px 10px 10px;
-    }
-    .left section {
-      border-top: 1px solid #ddd;
-      padding-top: 15px;
-    }
-    .left section:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
-    .left section h3 {
-      color: white;
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .left ul {
-      list-style: circle;
-      padding-left: 0;
-      margin: 0;
-    }
-    .left ul li {
-      margin-bottom: 6px;
-      display: flex;
       align-items: center;
-      gap: 8px;
+      overflow: hidden;
+      border-right: 2px solid rgba(211, 211, 211, 0.781);
+      
     }
-    /* Ícones pequenos */
-    .icon {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      fill: #007bff;
-      flex-shrink: 0;
+    .top {
+      display: flex;
+      gap: 50px;
+      padding: 20px;
+    }
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid var(--text-light);
+      object-fit: cover;
+      margin-top: 30px;
+      margin-left: 30px;
+    }
+    .head {
+      text-align: center;
+      background: skyblue;
+     
+    }
+    .body2 {
+      display: flex;
+      margin-top: -20px;
     }
 
-    /* Coluna direita */
-    .right {
-        margin: 20px;
-      width: 65%;
-      font-size: 15px;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      box-sizing: border-box;
-      height: 100%;
+    .head > h2 {
+      margin-top: -20px;
+      padding-bottom: 20px;
     }
-    .right section h3 {
-      font-size: 20px;
-      color: white;
-      margin-bottom: 12px;
-      font-weight: 700;
-      border-bottom: 2px solid #007bff;
-      padding: 5px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      background-color: #004a99;
+
+    #preview-name {
+      border-bottom: 1px solid var(--main-color);
     }
-    .right section p {
-      line-height: 1.5;
-      margin-bottom: 0;
+    
+    .left .section {
+      margin-top: 10px;
+      width: 100%;
     }
-    .right section ul {
-      list-style-type: square;
-      padding-left: 20px;
+    .left .section h3 {
+      font-size: 14px;
+      margin: 10px 0 5px;
+      border-bottom: 1px solid var(--main-color);
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+    .left .section ul {
+      padding-left: 0;
+      list-style: none;
+      font-size: 12px;
+      text-align: left;
       margin: 0;
     }
-    .right section ul li {
-      margin-bottom: 6px;
+    .left .section ul li {
+      margin-bottom: 4px;
     }
-    @media screen and (max-width: 768px) {
+    .right {
+      width: 65%;
+      height: 1123px;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--text-light);
+    }
+    .right .section {
+      margin-bottom: 15px;
+      width: 100%;
+    }
+    .right .section h3 {
+      font-size: 14px;
+      margin: 10px 0 5px;
+      border-bottom: 1px solid var(--text-dark);
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+    .right .section ul {
+      padding-left: 20px;
+      font-size: 12px;
+      margin: 0;
+    }
+    .right p {
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0 0 10px;
+    }
+
+    #preview-experience-extras-list,
+    #preview-education-list,
+    #preview-other-skills-list {
+    list-style-type: square;
+    padding-left: 20px; /* para dar espaço para o bullet */
+    }
+   @media screen and (max-width: 768px) {
   body {
     height: auto;
     overflow-y: auto;
@@ -180,79 +146,63 @@
     margin: 0 auto 30px auto;
   }
 }
-.tudo {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  
-}
   </style>
 </head>
 <body>
   <div class="preview">
-
-    <div class="tudo">
-      <div class="personal">
-          <h1 id="preview-name">Seu Nome</h1>
-          <h2 id="preview-position">Cargo</h2>
+      <div class="head">
+        <div class="top">
+          <img id="preview-foto" src="" alt="Foto" />
+          <h1 id="preview-name"> Seu Nome</h1>
+        </div>
+        <h2 id="preview-position">Cargo</h2>
       </div>
-      <div class="header">
-        <div class="header-left">
-          <img id="preview-foto" src="" alt="Foto">
+    <div class="body2">
+      <div class="left">
+        <div class="section">
+          <h3 id="preview-phone-title">Contato</h3>
+          <ul id="preview-phone-list"></ul>
+          <ul id="preview-email-list"></ul>
+          <ul id="preview-address-list"></ul>
+          <ul id="preview-website-list"></ul>
         </div>
-        <div class="header-right">
-          <section>
-            <h3 id="preview-phone-title">Contato</h3>
-            <ul id="preview-phone-list"></ul>
-            <ul id="preview-email-list"></ul>
-            <ul id="preview-address-list"></ul>
-            <ul id="preview-website-list"></ul>
-          </section>
-          <section>
-            <h3 id="preview-languages-title">Idiomas</h3>
-            <ul id="preview-languages-list"></ul>
-          </section>
+        <div class="section">
+          <h3 id="preview-skills-title">Habilidades Técnicas</h3>
+          <ul id="preview-skills-list"></ul>
         </div>
-      </div>
-      <div class="content">
-        <div class="left">
-          <section>
-            <h3 id="preview-skills-title">Habilidades Técnicas</h3>
-            <ul id="preview-skills-list"></ul>
-          </section>
-          <section>
-            <h3 id="preview-education-title">Formação</h3>
-            <ul id="preview-education-list"></ul>
-          </section>
-          <section>
-            <h3 id="preview-reference-title">Referência</h3>
-            <p id="preview-reference"></p>
-          </section>
+        <div class="section">
+          <h3 id="preview-languages-title">Idiomas</h3>
+          <ul id="preview-languages-list"></ul>
         </div>
-        <div class="right">
-          <section>
-            <h3 id="preview-profile-title">Perfil</h3>
-            <p id="preview-profile"></p>
-          </section>
-          <section>
-            <h3 id="preview-experience-title">Experiência Profissional</h3>
-            <p id="preview-experience"></p>
-            <ul id="preview-experience-extras-list"></ul>
-          </section>
-      
-          <section>
-            <h3 id="preview-other-skills-title">Outras Habilidades</h3>
-            <ul id="preview-other-skills-list"></ul>
-          </section>
-          <section>
+        <div class="section">
             <h3 id="preview-availability-title" >Disponibilidade</h3>
             <p id="preview-availability"></p>
-          </section>
+        </div>
+      </div>
+      <div class="right">
+        <div class="section">
+          <h3 id="preview-profile-title">Perfil</h3>
+          <p id="preview-profile"></p>
+        </div>
+        <div class="section">
+        <h3 id="preview-experience-title">Experiência Profissional</h3>
+        <p id="preview-experience"></p>
+        <ul id="preview-experience-extras-list" style="padding-left: 20px; margin-top: 5px;"></ul>
+      </div>
+        <div class="section">
+          <h3 id="preview-education-title">Formação</h3>
+          <ul id="preview-education-list"></ul>
+        </div>
+        <div class="section">
+          <h3 id="preview-other-skills-title">Outras Habilidades</h3>
+          <ul id="preview-other-skills-list"></ul>
+        </div>
+        <div class="section">
+          <h3 id="preview-reference-title">Referência</h3>
+          <p id="preview-reference"></p>
         </div>
       </div>
     </div>
-
   </div>
 </body>
 </html>

@@ -8,32 +8,24 @@
       font-family: 'Montserrat', sans-serif;
       overflow-y: scroll;
     }
-
-    :root {
-  --main-color: #2f3e52;
-  --text-light: white;
-  --text-dark: black;
-   }
-
-
     .preview {
       width: 794px;
       height: 1123px;
       display: flex;
       box-sizing: border-box;
-      background: var(--text-light);
+      background: white;
     }
     .left {
       width: 35%;
       height: 1123px; /* ocupa toda altura da página */
-      background: var(--main-color);
-      color: var(--text-light);
+      border-right: 3px solid white;
       padding: 20px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       overflow: hidden;
+      background-image: linear-gradient( to left, #abc1dd, white);
     }
     .left .top {
       display: flex;
@@ -45,7 +37,7 @@
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      border: 4px solid var(--text-light);
+      border: 4px solid white;
       object-fit: cover;
       margin-bottom: 10px;
     }
@@ -67,7 +59,7 @@
     .left .section h3 {
       font-size: 14px;
       margin: 10px 0 5px;
-      border-bottom: 1px solid var(--text-light);
+      border-bottom: 1px solid white;
       display: none;
       width: 100%;
       text-align: left;
@@ -90,6 +82,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      background-image: linear-gradient( to right, #abc1dd, white);
     }
     .right .section {
       margin-bottom: 15px;
@@ -98,7 +91,7 @@
     .right .section h3 {
       font-size: 14px;
       margin: 10px 0 5px;
-      border-bottom: 1px solid var(--text-dark);
+      border-bottom: 1px solid black;
       display: none;
       width: 100%;
       text-align: left;
