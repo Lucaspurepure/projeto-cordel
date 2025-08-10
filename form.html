@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Preencha o seu formulário</title>
+  <title>ex01</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
@@ -227,6 +227,10 @@
   #prevBtn:hover, #nextBtn:hover {
     background: rgba(255, 217, 0, 0.87);
   }
+  #templateCarousel > img {
+    width: 50vw;
+    height: auto;
+  }
 
         /* Adições para Responsividade */
     @media (max-width: 768px) {
@@ -257,30 +261,12 @@
         border-radius: 4px;
         cursor: pointer;
       }
-
-      #mobile-preview-page {
-        transform-origin: top left;
-        
-        overflow: hidden;
+      #download-btn {
+        display: none;
       }
-
-      #cv-preview-mobile {
-        width: 794px;
-      height: 1123px;
-      background: white;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      
+      #btnTemplateSelector {
+        display: none;
       }
-      .scale-wrapper {
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
     }
 
   </style>
@@ -368,9 +354,7 @@
   <!-- Página de Pré-visualização Mobile -->
   <div id="mobile-preview-page" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; overflow:auto;">
     <div style="background:#2f3e52; color:white; padding:10px; text-align:center; cursor:pointer;" onclick="fecharPreviewMobile()">Voltar ao Formulário</div>
-    <div class="wrapper" style="display:flex; justify-content:center; align-items:flex-start; padding:10px;">
-      <div id="cv-preview-mobile" style="display:flex; justify-content:center; align-items:flex-start; padding:10px;"></div>
-    </div>
+    <div id="cv-preview-mobile" style="display:flex; justify-content:center; align-items:flex-start; padding:10px;"></div>
 
     <div class="mobile-preview-buttons">
     <input type="color" class="button" id="colorPicker" value="#2f3e52" style="width:40px; height:40px; border:none; cursor:pointer; margin-left:10px;" onchange="trocarCor(this.value)">
@@ -862,26 +846,58 @@ function downloadPDF() {
 }
 
 // --- Download PDF (mobile) ---
-function downloadPDFMobile() {
-  const el = document.getElementById("cv-preview-mobile");
-  const loading = document.getElementById("loading-msg");
-
-  const prevDisplay = el.style.display;
-  el.style.display = "block";  // garantir visibilidade
-
-  loading.style.display = "block";
-
-  html2pdf().set({
-    margin: [0, 0, 0, 0],
-    filename: "cv.pdf",
-    image: { type: "jpeg", quality: 1 },
-    html2canvas: { scale: 2, scrollY: 0, useCORS: true },
-    jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" }
-  }).from(el).save().then(() => {
-    el.style.display = prevDisplay;
-    loading.style.display = "none";
+function aplicarTamanhosFixos(container) {
+  container.querySelectorAll('h1').forEach(el => el.style.fontSize = '24px');
+  container.querySelectorAll('h2').forEach(el => el.style.fontSize = '20px');
+  container.querySelectorAll('p').forEach(el => el.style.fontSize = '14px');
+  container.querySelectorAll('h3').forEach(el => el.style.fontSize = '20px');
+  container.querySelectorAll('ul').forEach(el => el.style.fontSize = '14px');
+  container.querySelectorAll('img').forEach(img => {
+    img.style.width = '100px';
+    img.style.height = '100px';
   });
 }
+
+async function downloadPDFMobile() {
+  const loading = document.getElementById("loading-msg");
+  loading.style.display = "block";
+
+  if (typeof html2pdf === "undefined") {
+    await new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  try {
+    const preview = document.getElementById("cv-preview-mobile"); // sua pré-visualização
+    if (!preview || preview.innerHTML.trim() === "") {
+      alert("Nenhum conteúdo para baixar.");
+      loading.style.display = "none";
+      return;
+    }
+
+    // Aplica tamanhos fixos no preview antes do download
+    aplicarTamanhosFixos(preview);
+
+    await html2pdf().set({
+      margin: 0,
+      filename: "cv.pdf",
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: { scale: 2, scrollY: 0, useCORS: true },
+      jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" }
+    }).from(preview).save();
+
+  } catch (e) {
+    alert("Erro ao gerar PDF: " + e.message);
+  }
+
+  loading.style.display = "none";
+}
+
 
 // --- Abrir preview mobile ---
 function abrirPreviewMobile() {
@@ -1125,23 +1141,6 @@ async function corrigirCamposCV2x() {
   document.getElementById('nextBtn').addEventListener('click', () => {
     carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   });
-</script>
-<script>
-function aplicarScale() {
-  const wrapper = document.querySelector('.scale-wrapper');
-  const preview = document.getElementById('cv-preview-mobile');
-  if (!wrapper || !preview) return;
-
-  const larguraDisponivel = wrapper.clientWidth;
-  const larguraA4 = 794;
-  const escala = larguraDisponivel / larguraA4;
-
-  preview.style.transform = `scale(${escala})`;
-}
-
-// Chamar quando carregar e quando redimensionar
-window.addEventListener('load', aplicarScale);
-window.addEventListener('resize', aplicarScale);
 </script>
 
 </body>

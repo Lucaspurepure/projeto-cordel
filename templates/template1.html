@@ -34,6 +34,7 @@
       flex-direction: column;
       align-items: center;
       overflow: hidden;
+      
     }
     .left .top {
       display: flex;
@@ -84,7 +85,7 @@
     }
     .right {
       width: 65%;
-      height: 1123px; /* altura total para alinhar */
+      height: 100vh; /* altura total para alinhar */
       padding: 20px;
       box-sizing: border-box;
       display: flex;
@@ -120,19 +121,51 @@
     list-style-type: square;
     padding-left: 20px; /* para dar espaço para o bullet */
     }
-   @media screen and (max-width: 768px) {
+        @media screen and (max-width: 768px) {
   body {
     height: auto;
     overflow-y: auto;
   }
 
-  .preview {
-    width: 794px;
-    height: 1123px;
+.left h1 {
+    font-size: 1.8vw;
+    min-width: 18px;
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
     
-    transform-origin: top left;
-    margin: 0 auto 30px auto;
-  }
+}
+.left img {
+  width: 10vw;
+  height: 10vw;
+}
+    .left h2 {
+      font-size: 1.4vw;
+      min-width: 14px;
+    }
+    .left .section h3 {
+      font-size: 1.4vw;
+
+    }
+    .left .section ul {
+      
+      font-size: 1.2vw;
+    }
+
+    .right .section h3 {
+      font-size: 1.4vw;
+      
+    }
+    .right .section ul {
+      
+      font-size: 1.2vw;
+      
+    }
+    .right p {
+      font-size: 1.3vw;
+      
+    }
+    
 }
   </style>
 </head>
