@@ -227,10 +227,6 @@
   #prevBtn:hover, #nextBtn:hover {
     background: rgba(255, 217, 0, 0.87);
   }
-  #templateCarousel > img {
-    width: 50vw;
-    height: auto;
-  }
 
         /* Adições para Responsividade */
     @media (max-width: 768px) {
@@ -261,14 +257,28 @@
         border-radius: 4px;
         cursor: pointer;
       }
-      #download-btn {
-        display: none;
-      }
-      #btnTemplateSelector {
-        display: none;
-      }
-    }
 
+    }
+    #cv-hidden {
+      display: none;
+    }
+    @media print {
+    #cv-hidden {
+      display: block;
+      
+      width: 794px;
+      height: 1123px;
+      display: flex;
+      box-sizing: border-box;
+    }
+    }
+    #cv-preview-mobile {
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding:10px;
+      
+    }
   </style>
 </head>
 <body>
@@ -354,7 +364,7 @@
   <!-- Página de Pré-visualização Mobile -->
   <div id="mobile-preview-page" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; overflow:auto;">
     <div style="background:#2f3e52; color:white; padding:10px; text-align:center; cursor:pointer;" onclick="fecharPreviewMobile()">Voltar ao Formulário</div>
-    <div id="cv-preview-mobile" style="display:flex; justify-content:center; align-items:flex-start; padding:10px;"></div>
+    <div id="cv-preview-mobile" class="cv mobile"></div>
 
     <div class="mobile-preview-buttons">
     <input type="color" class="button" id="colorPicker" value="#2f3e52" style="width:40px; height:40px; border:none; cursor:pointer; margin-left:10px;" onchange="trocarCor(this.value)">
@@ -364,8 +374,11 @@
     <button type="button" class="button" id="btnCorrigirAcentos">Corrigir Acentos</button>
     
     </div>
+    <div id="cv-hidden" class="cv hidden"> </div>
 
   </div>
+
+  
 
   <div id="templateModal">
   
@@ -486,7 +499,7 @@ function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
   atualizarListaPreview('languages');
 }
 
-// --- Carregar template (desktop e mobile) ---
+// --- Carregar template (desktop, mobile e oculto para PDF) ---
 function carregarTemplate(nome) {
   templateAtual = nome;
 
@@ -496,9 +509,18 @@ function carregarTemplate(nome) {
       return res.text();
     })
     .then(html => {
+      // Desktop preview
       document.getElementById("cv-preview").innerHTML = html;
+
+      // Mobile preview visível
       const mobilePreview = document.getElementById("cv-preview-mobile");
       if (mobilePreview) mobilePreview.innerHTML = html;
+
+      // Mobile preview oculto (para PDF)
+      const hiddenPreview = document.getElementById("cv-hidden");
+      if (hiddenPreview) hiddenPreview.innerHTML = html;
+
+      // Aplicar dados nos três previews
       aplicarTodosOsDados();
       atualizarImagemPreview();
 
@@ -514,6 +536,7 @@ function carregarTemplate(nome) {
 
   document.getElementById("templateModal").style.display = "none";
 }
+
 
 // --- Imagem do usuário ---
 function carregarImagem(event) {
@@ -846,56 +869,43 @@ function downloadPDF() {
 }
 
 // --- Download PDF (mobile) ---
-function aplicarTamanhosFixos(container) {
-  container.querySelectorAll('h1').forEach(el => el.style.fontSize = '24px');
-  container.querySelectorAll('h2').forEach(el => el.style.fontSize = '20px');
-  container.querySelectorAll('p').forEach(el => el.style.fontSize = '14px');
-  container.querySelectorAll('h3').forEach(el => el.style.fontSize = '20px');
-  container.querySelectorAll('ul').forEach(el => el.style.fontSize = '14px');
-  container.querySelectorAll('img').forEach(img => {
-    img.style.width = '100px';
-    img.style.height = '100px';
-  });
-}
-
-async function downloadPDFMobile() {
+function downloadPDFMobile() {
+  const el = document.getElementById("cv-hidden");
   const loading = document.getElementById("loading-msg");
+
+  const prevDisplay = el.style.display;
+  el.style.display = "block";  // garantir visibilidade
+
+  // Criar <style> temporário para tamanhos fixos
+  const pdfStyle = document.createElement("style");
+  pdfStyle.id = "pdf-temp-style";
+  pdfStyle.innerHTML = `
+    #cv-hidden h1 { font-size: 24px !important; }
+    #cv-hidden h2 { font-size: 20px !important; }
+    #cv-hidden h3 { font-size: 18px !important; }
+    #cv-hidden p { font-size: 14px !important; }
+    #cv-hidden li { font-size: 14px !important; }
+    #cv-hidden img { max-width: 100px !important; height: auto !important; }
+  `;
+  document.head.appendChild(pdfStyle);
+
   loading.style.display = "block";
 
-  if (typeof html2pdf === "undefined") {
-    await new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
-  }
+  html2pdf().set({
+    margin: [0, 0, 0, 0],
+    filename: "cv.pdf",
+    image: { type: "jpeg", quality: 1 },
+    html2canvas: { scale: 2, scrollY: 0, useCORS: true },
+    jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" }
+  }).from(el).save().then(() => {
+    // Restaurar estado
+    el.style.display = prevDisplay;
+    loading.style.display = "none";
 
-  try {
-    const preview = document.getElementById("cv-preview-mobile"); // sua pré-visualização
-    if (!preview || preview.innerHTML.trim() === "") {
-      alert("Nenhum conteúdo para baixar.");
-      loading.style.display = "none";
-      return;
-    }
-
-    // Aplica tamanhos fixos no preview antes do download
-    aplicarTamanhosFixos(preview);
-
-    await html2pdf().set({
-      margin: 0,
-      filename: "cv.pdf",
-      image: { type: "jpeg", quality: 1 },
-      html2canvas: { scale: 2, scrollY: 0, useCORS: true },
-      jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" }
-    }).from(preview).save();
-
-  } catch (e) {
-    alert("Erro ao gerar PDF: " + e.message);
-  }
-
-  loading.style.display = "none";
+    // Remover estilo temporário
+    const temp = document.getElementById("pdf-temp-style");
+    if (temp) temp.remove();
+  });
 }
 
 
