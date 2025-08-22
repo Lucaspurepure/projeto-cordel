@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ex01</title>
+  <title>Crie seu cv num instante</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
@@ -68,6 +68,12 @@
       overflow: hidden;
       padding: 0;
       position: relative;
+      
+      width: 794px;
+      height: 1123px;
+      
+      box-sizing: border-box;
+      
     }
     #cv-preview {
       width: 794px;
@@ -198,6 +204,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: 20vw;
 }
 
 /*nova funcao de escolha de templates*/
@@ -227,9 +234,10 @@
   #prevBtn:hover, #nextBtn:hover {
     background: rgba(255, 217, 0, 0.87);
   }
-  .preview {
-    overflow-y: scroll;
-  }
+
+  #cv-hidden {
+      display: none;
+    }
 
         /* Adições para Responsividade */
     @media (max-width: 768px) {
@@ -262,9 +270,6 @@
       }
 
     }
-    #cv-hidden {
-      display: none;
-    }
     @media print {
     #cv-hidden {
       display: block;
@@ -274,13 +279,6 @@
       display: flex;
       box-sizing: border-box;
     }
-    }
-    #cv-preview-mobile {
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-      padding:10px;
-      
     }
   </style>
 </head>
@@ -361,13 +359,13 @@
   </form>
 
   <div class="preview">
-    <div id="cv-preview" class="cv desktop"></div>
+    <div id="cv-preview"></div>
   </div>
 
   <!-- Página de Pré-visualização Mobile -->
   <div id="mobile-preview-page" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; overflow:auto;">
     <div style="background:#2f3e52; color:white; padding:10px; text-align:center; cursor:pointer;" onclick="fecharPreviewMobile()">Voltar ao Formulário</div>
-    <div id="cv-preview-mobile" class="cv mobile"></div>
+    <div id="cv-preview-mobile" style="display:flex; justify-content:center; align-items:flex-start; padding:10px;" class="cv mobile"></div>
 
     <div class="mobile-preview-buttons">
     <input type="color" class="button" id="colorPicker" value="#2f3e52" style="width:40px; height:40px; border:none; cursor:pointer; margin-left:10px;" onchange="trocarCor(this.value)">
@@ -377,11 +375,10 @@
     <button type="button" class="button" id="btnCorrigirAcentos">Corrigir Acentos</button>
     
     </div>
+    </div>
     <div id="cv-hidden" class="cv hidden"> </div>
 
   </div>
-
-  
 
   <div id="templateModal">
   
@@ -395,10 +392,10 @@
           <img src="img/template1.png" alt="Template 1" onclick="carregarTemplate('template1')" class="template-thumb">
           <img src="img/template2.png" alt="Template 2" onclick="carregarTemplate('template2')" class="template-thumb">
           <img src="img/template3.png" alt="Template 3" onclick="carregarTemplate('template3')" class="template-thumb">
-          <img src="img/template4.png" alt="Template 4" onclick="carregarTemplate('template4')" class="template-thumb">
-          <img src="img/template5.png" alt="Template 5" onclick="carregarTemplate('template5')" class="template-thumb">
-          <img src="img/template6.png" alt="Template 6" onclick="carregarTemplate('template6')" class="template-thumb">
-          <img src="img/template7.png" alt="Template 7" onclick="carregarTemplate('template7')" class="template-thumb">
+          <img src="img/template2.png" alt="Template 4" onclick="carregarTemplate('template4')" class="template-thumb">
+          <img src="img/template1.png" alt="Template 5" onclick="carregarTemplate('template5')" class="template-thumb">
+          <img src="img/template3.png" alt="Template 6" onclick="carregarTemplate('template6')" class="template-thumb">
+          <img src="img/template1.png" alt="Template 7" onclick="carregarTemplate('template7')" class="template-thumb">
         </div>
       </div>
       
@@ -539,7 +536,6 @@ function carregarTemplate(nome) {
 
   document.getElementById("templateModal").style.display = "none";
 }
-
 
 // --- Imagem do usuário ---
 function carregarImagem(event) {
@@ -879,19 +875,6 @@ function downloadPDFMobile() {
   const prevDisplay = el.style.display;
   el.style.display = "block";  // garantir visibilidade
 
-  // Criar <style> temporário para tamanhos fixos
-  const pdfStyle = document.createElement("style");
-  pdfStyle.id = "pdf-temp-style";
-  pdfStyle.innerHTML = `
-    #cv-hidden h1 { font-size: 24px !important; }
-    #cv-hidden h2 { font-size: 20px !important; }
-    #cv-hidden h3 { font-size: 18px !important; }
-    #cv-hidden p { font-size: 14px !important; }
-    #cv-hidden li { font-size: 14px !important; }
-    #cv-hidden img { max-width: 100px !important; height: auto !important; }
-  `;
-  document.head.appendChild(pdfStyle);
-
   loading.style.display = "block";
 
   html2pdf().set({
@@ -901,16 +884,10 @@ function downloadPDFMobile() {
     html2canvas: { scale: 2, scrollY: 0, useCORS: true },
     jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" }
   }).from(el).save().then(() => {
-    // Restaurar estado
     el.style.display = prevDisplay;
     loading.style.display = "none";
-
-    // Remover estilo temporário
-    const temp = document.getElementById("pdf-temp-style");
-    if (temp) temp.remove();
   });
 }
-
 
 // --- Abrir preview mobile ---
 function abrirPreviewMobile() {

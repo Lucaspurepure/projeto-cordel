@@ -12,9 +12,16 @@
       height: 100%;
       overflow: auto;
     }
-    
+    .preview {
+      width: 794px;
+      height: 1123px;
+      background: #fdfdfd;
+      display: flex;
+      flex-direction: row;
+      border: 1px solid #ccc;
+    }
     .left {
-      width: 40%;
+      width: 30%;
       background-color: #1e293b;
       color: white;
       padding: 25px;
@@ -99,36 +106,15 @@
     height: auto;
     overflow-y: auto;
   }
-  /* ===== Estilos comuns (válidos para ambos) ===== */
-.cv h1 { font-weight: bold; }
-.cv p { line-height: 1.5; }
-/* ... resto do design que é igual para preview e download ... */
 
-/* ===== Estilos para pré-visualização ===== */
-.cv.mobile .header h1 { font-size: 2.8vw; min-width: 18px; } 
-.cv.mobile .header h2 {font-size: 1.6vw; min-width: 14px;}
-.cv.mobile .left .section h3 {font-size: 1.4vw;}
-.cv.mobile .left img {width: 10vw; height: 10vw;}
-.cv.mobile .left .section ul {font-size: 1.3vw;}
-.cv.mobile .right .section h3 {font-size: 1.5vw;}
-.cv.mobile .right .section ul {font-size: 1.4vw;}
-.cv.mobile .right .section p {font-size: 1.4vw;}
-.cv.mobile .right {height: 80vh;}
-.cv.mobile .left {height: 80vh;}
-.cv.mobile .preview {
-      width: 90vw;
-      height: 80vh;
-      display: flex;
-      box-sizing: border-box;
-      background: var(--text-light);
-    }
-.cv.hidden .preview {
-      width: 794px;
-      height: 1123px;
-      display: flex;
-      box-sizing: border-box;
-      background: var(--text-light);
-    }
+
+  .preview {
+    width: 794px;
+    height: 1123px;
+    
+    transform-origin: top left;
+    margin: 0 auto 30px auto;
+  }
 }
 
   </style>
