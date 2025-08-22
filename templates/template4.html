@@ -6,7 +6,7 @@
     html, body {
       margin: 0; padding: 0; height: 100%; width: 100%;
       font-family: 'Montserrat', sans-serif;
-      overflow-y: scroll;
+      overflow-y: auto;
     
     }
 
@@ -16,14 +16,14 @@
   --text-dark: black;
    }
 
-
-    .preview {
+    .cv.desktop .preview {
       width: 794px;
       height: 1123px;
       display: block;
       box-sizing: border-box;
-      
+      background: var(--text-light);
     }
+    
     .left {
       width: 35%;
       height: 1123px;
@@ -135,13 +135,137 @@
     overflow-y: auto;
   }
 
-  .preview {
-    width: 794px;
-    height: 1123px;
+  .cv.mobile .left {
+      width: 35%;
+      height: 100%;
+      background: linear-gradient(to left, lightgray, white);
+      color: var(--main-color);
+      padding: 2vw;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      border-right: 0.2vw solid rgba(211, 211, 211, 0.781);
+    }
+    .cv.mobile .top {
+      display: flex;
+      gap: 5vw;
+      padding: 2vw;
+    }
+    .cv.mobile .top h1 {
+      font-size: 2.5vw;
+      
+    }
+    .cv.mobile img {
+      width: 10vw;
+      height: 10vw;
+      border-radius: 50%;
+      border: 0.4vw solid var(--text-light);
+      object-fit: cover;
+      margin-bottom: 1vw;
+    }
+    .cv.mobile .head {
+      text-align: center;
+      background: linear-gradient(to bottom, lightgray, white);
+    }
+    .cv.mobile .body2 {
+      display: flex;
+      margin-top: -2vw;
+    }
+
+    .cv.mobile .head > h2 {
+      margin-top: -2vw;
+      padding-bottom: 2vw;
+      font-size: 1.8vw;
+    }
+
+    .cv.mobile #preview-name {
+      border-bottom: 0.1vw solid var(--main-color);
+    }
     
-    transform-origin: top left;
-    margin: 0 auto 30px auto;
-  }
+    .cv.mobile .left .section {
+      margin-top: 1vw;
+      width: 100%;
+    }
+    .cv.mobile .left .section h3 {
+      font-size: 1.4vw;
+      margin: 1vw 0 0.5vw;
+      border-bottom: 0.1vw solid var(--main-color);
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+    .cv.mobile .left .section ul {
+      padding-left: 0;
+      list-style: none;
+      font-size: 1.2vw;
+      text-align: left;
+      margin: 0;
+    }
+    .cv.mobile .left .section ul li {
+      margin-bottom: 0.4vw;
+    }
+    .cv.mobile .right {
+      width: 65%;
+      height: 100%;
+      padding: 2vw;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: linear-gradient(to right, lightgray, white);
+    }
+    .cv.mobile .right .section {
+      margin-bottom: 1.5vw;
+      width: 100%;
+    }
+    .cv.mobile .right .section h3 {
+      font-size: 1.4vw;
+      margin: 1vw 0 0.5vw;
+      border-bottom: 1px solid var(--text-dark);
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+    .cv.mobile .right .section ul {
+      padding-left: 2vw;
+      font-size: 1.2vw;
+      margin: 0;
+    }
+    .cv.mobile .right p {
+      font-size: 1.3vw;
+      line-height: 1.5;
+      margin: 0 0 1vw;
+    }
+
+    .cv.mobile #preview-experience-extras-list,
+    #preview-education-list,
+    #preview-other-skills-list {
+    list-style-type: square;
+    padding-left: 2vw; /* para dar espaço para o bullet */
+    }
+
+.cv.mobile .right {height: 60vh;}
+.cv.mobile .left {height: 60vh;}
+.cv.mobile .preview {
+      width: 90vw;
+      height: 70vh;
+      display: flex;
+      box-sizing: border-box;
+      background: var(--text-light);
+      border: 1px solid rgba(0, 0, 0, 0.171);
+      border-radius: 5px;
+      box-shadow: 5px 5px 10px gray;
+      display: block;
+    }
+.cv.hidden .preview {
+      width: 794px;
+      height: 1123px;
+      display: block;
+      box-sizing: border-box;
+      background: var(--text-light);
+    }
 }
   </style>
 </head>

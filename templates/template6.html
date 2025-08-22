@@ -6,15 +6,9 @@
     html, body {
       margin: 0; padding: 0; height: 100%; width: 100%;
       font-family: 'Montserrat', sans-serif;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
-    .preview {
-      width: 794px;
-      height: 1123px;
-      display: flex;
-      box-sizing: border-box;
-      background: white;
-    }
+    
     .left {
       width: 35%;
       height: 1123px; /* ocupa toda altura da página */
@@ -119,13 +113,124 @@
     overflow-y: auto;
   }
 
-  .preview {
-    width: 794px;
-    height: 1123px;
-    
-    transform-origin: top left;
-    margin: 0 auto 30px auto;
-  }
+  .left {
+      width: 35%;
+      height: 100%; /* ocupa toda altura da página */
+      border-right: 0.3vw solid white;
+      padding: 2vw;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      background-image: linear-gradient( to left, #abc1dd, white);
+    }
+    .left .top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2vw;
+    }
+    .left img {
+      width: 10vw;
+      height: 10vw;
+      border-radius: 50%;
+      border: 0.4vw solid white;
+      object-fit: cover;
+      margin-bottom: 1vw;
+    }
+    .left h1 {
+      font-size: 1.8vw;
+      margin: 0;
+      text-align: center;
+    }
+    .left h2 {
+      font-size: 1.4vw;
+      font-weight: normal;
+      margin-bottom: 1vw;
+      text-align: center;
+    }
+    .left .section {
+      margin-top: 1vw;
+      width: 100%;
+    }
+    .left .section h3 {
+      font-size: 1.4vw;
+      margin: 1vw 0 0.5vw;
+      border-bottom: 0.1vw solid white;
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+    .left .section ul {
+      padding-left: 0;
+      list-style: none;
+      font-size: 1.2vw;
+      text-align: left;
+      margin: 0;
+    }
+    .left .section ul li {
+      margin-bottom: 0.4vw;
+    }
+    .right {
+      width: 65%;
+      height: 100%; /* altura total para alinhar */
+      padding: 2vw;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background-image: linear-gradient( to right, #abc1dd, white);
+    }
+    .right .section {
+      margin-bottom: 1.5vw;
+      width: 100%;
+    }
+    .right .section h3 {
+      font-size: 1.4vw;
+      margin: 1vw 0 0.5vw;
+      border-bottom: 0.1vw solid black;
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+    .right .section ul {
+      padding-left: 2vw;
+      font-size: 1.2vw;
+      margin: 0;
+    }
+    .right p {
+      font-size: 1.3vw;
+      line-height: 1.5;
+      margin: 0 0 1vw;
+    }
+
+    #preview-experience-extras-list,
+    #preview-education-list,
+    #preview-other-skills-list {
+    list-style-type: square;
+    padding-left: 2vw; /* para dar espaço para o bullet */
+    }
+
+.cv.mobile .right {height: 70vh;}
+.cv.mobile .left {height: 70vh;}
+.cv.mobile .preview {
+      width: 90vw;
+      height: 70vh;
+      display: flex;
+      box-sizing: border-box;
+      background: var(--text-light);
+      border: 1px solid rgba(0, 0, 0, 0.171);
+      border-radius: 5px;
+      box-shadow: 5px 5px 10px gray;
+    }
+.cv.hidden .preview {
+      width: 794px;
+      height: 1123px;
+      display: flex;
+      box-sizing: border-box;
+      background: var(--text-light);
+    }
 }
   </style>
 </head>
