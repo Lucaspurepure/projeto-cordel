@@ -115,6 +115,33 @@
     list-style-type: square;
     padding-left: 20px; /* para dar espaço para o bullet */
     }
+    /* vale para Formação e Experiência */
+/* Container das linhas de experiência/educação */
+#preview-experience-extras-list div,
+#preview-education-list div {
+  display: flex;              /* Mantém ano e descrição na mesma linha */
+  justify-content: flex-start; /* Alinha à esquerda */
+  gap: 10px;                  /* Espaço entre ano e descrição */
+  margin-bottom: 5px;         /* Espaço entre linhas */
+  flex-wrap: wrap;            /* Quebra linha em telas pequenas */
+}
+
+/* Ano */
+#preview-experience-extras-list .ano,
+#preview-education-list .ano {
+  width: 100px;               /* Largura fixa para alinhar todas as linhas */
+  font-weight: bold;          /* Destaque */
+  flex-shrink: 0;             /* Não encolhe em telas pequenas */
+}
+
+/* Descrição */
+#preview-experience-extras-list .descricao,
+#preview-education-list .descricao {
+  flex: 1;                    /* Ocupa o restante do espaço */
+  word-break: break-word;     /* Quebra linha se o texto for longo */
+}
+
+
    @media screen and (max-width: 768px) {
   
   /* ===== Estilos comuns (válidos para ambos) ===== */
@@ -236,6 +263,33 @@
       box-sizing: border-box;
       background: var(--text-light);
     }
+    
+.cv.mobile #preview-experience-extras-list div,
+#preview-education-list div {
+  display: flex;              /* Mantém ano e descrição na mesma linha */
+  justify-content: flex-start; /* Alinha à esquerda */
+  gap: 1vw;                  /* Espaço entre ano e descrição */
+  margin-bottom: 0.1vw;         /* Espaço entre linhas */
+  flex-wrap: wrap;            /* Quebra linha em telas pequenas */
+}
+
+/* Ano */
+.cv.mobile #preview-experience-extras-list .ano,
+#preview-education-list .ano {
+  width: 10vw;               /* Largura fixa para alinhar todas as linhas */
+  font-weight: bold;          /* Destaque */
+               /* Não encolhe em telas pequenas */
+}
+
+/* Descrição */
+.cv.mobile #preview-experience-extras-list .descricao,
+#preview-education-list .descricao {
+  flex: 1;                    /* Ocupa o restante do espaço */
+  word-break: break-word;     /* Quebra linha se o texto for longo */
+  margin-left: -15vw;
+}
+
+
 }
   </style>
 </head>
@@ -280,7 +334,7 @@
       <div class="section">
   <h3 id="preview-experience-title">Experiência Profissional</h3>
   <p id="preview-experience"></p>
-  <ul id="preview-experience-extras-list" style="padding-left: 20px; margin-top: 5px;"></ul>
+  <ul id="preview-experience-extras-list"></ul>
 </div>
 
 

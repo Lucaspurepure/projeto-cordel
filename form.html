@@ -235,6 +235,7 @@
     background: rgba(255, 217, 0, 0.87);
   }
 
+
   #cv-hidden {
       display: none;
     }
@@ -268,7 +269,7 @@
         border-radius: 4px;
         cursor: pointer;
       }
-
+      
     }
     @media print {
     #cv-hidden {
@@ -359,7 +360,7 @@
   </form>
 
   <div class="preview">
-    <div id="cv-preview"></div>
+    <div id="cv-preview" class="cv desktop"></div>
   </div>
 
   <!-- Página de Pré-visualização Mobile -->
@@ -413,17 +414,12 @@
  
 
 <script>
-
 // Variável global para armazenar a imagem base64
 let imagemBase64 = null;
-
-// Controle do tipo de nível idioma
 let idiomaNivelTipo = 'select'; // 'select' ou 'range'
-
-// Template atual selecionado global
 let templateAtual = 'template1';
 
-// --- Idiomas ---
+// ---------------------- Idiomas ----------------------
 function setIdiomaNivelTipo(tipo) {
   idiomaNivelTipo = tipo;
   recriarCamposIdiomas();
@@ -499,107 +495,61 @@ function adicionarCampoIdioma(valorIdioma = "", valorNivel = null) {
   atualizarListaPreview('languages');
 }
 
-// --- Carregar template (desktop, mobile e oculto para PDF) ---
+// ---------------------- Templates ----------------------
 function carregarTemplate(nome) {
   templateAtual = nome;
-
   fetch(`templates/${nome}.html`)
-    .then(res => {
-      if (!res.ok) throw new Error(`Status HTTP ${res.status}`);
-      return res.text();
-    })
+    .then(res => res.ok ? res.text() : Promise.reject(`Status ${res.status}`))
     .then(html => {
-      // Desktop preview
-      document.getElementById("cv-preview").innerHTML = html;
-
-      // Mobile preview visível
-      const mobilePreview = document.getElementById("cv-preview-mobile");
-      if (mobilePreview) mobilePreview.innerHTML = html;
-
-      // Mobile preview oculto (para PDF)
-      const hiddenPreview = document.getElementById("cv-hidden");
-      if (hiddenPreview) hiddenPreview.innerHTML = html;
-
-      // Aplicar dados nos três previews
+      ['cv-preview','cv-preview-mobile','cv-hidden'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.innerHTML = html;
+      });
       aplicarTodosOsDados();
       atualizarImagemPreview();
-
-      // 👇 Forçar ocultar a preview no mobile após carregar template
-      if (window.innerWidth <= 768) {
-        document.querySelector('.preview').style.display = 'none';
-      }
+      if(window.innerWidth<=768) document.querySelector('.preview').style.display='none';
     })
-    .catch(err => {
-      console.error("Erro ao carregar template:", err);
-      alert("Falha ao carregar template. Veja console.");
-    });
+    .catch(err => { console.error("Erro:", err); alert("Falha ao carregar template"); });
 
   document.getElementById("templateModal").style.display = "none";
 }
 
-// --- Imagem do usuário ---
+// ---------------------- Imagem ----------------------
 function carregarImagem(event) {
   const arquivo = event.target.files[0];
+  if (!arquivo) return;
   const reader = new FileReader();
-  reader.onload = function (e) {
-    imagemBase64 = e.target.result;
-    atualizarImagemPreview();
-  };
-  if (arquivo) reader.readAsDataURL(arquivo);
+  reader.onload = e => { imagemBase64 = e.target.result; atualizarImagemPreview(); };
+  reader.readAsDataURL(arquivo);
 }
 
 function atualizarImagemPreview() {
-  document.querySelectorAll('#preview-foto').forEach(img => {
-    if (img && imagemBase64) img.src = imagemBase64;
-  });
+  document.querySelectorAll('#preview-foto').forEach(img => { if(img && imagemBase64) img.src = imagemBase64; });
 }
 
-// --- Atualizar previews ---
+// ---------------------- Atualizações ----------------------
 function updatePreview(id) {
-  const valor = document.getElementById(id).value.trim();
-  document.querySelectorAll("#preview-" + id).forEach(p => {
-    if (p) p.innerText = valor;
-  });
-  document.querySelectorAll("#preview-" + id + "-title").forEach(t => {
-    if (t) t.style.display = valor ? "block" : "none";
-  });
-
-  if (id === 'experience') atualizarListaExperienciaExtrasPreview();
+  const valor = document.getElementById(id)?.value.trim() || '';
+  document.querySelectorAll("#preview-" + id).forEach(p=>{ if(p)p.innerText=valor; });
+  document.querySelectorAll("#preview-" + id + "-title").forEach(t=>{ if(t)t.style.display=valor?'block':'none'; });
+  if(id==='experience') atualizarListaExperienciaExtrasPreview();
 }
 
-// --- Experiência adicional ---
+// ---------------------- Experiência Profissional ----------------------
 function adicionarCampoExperiencia() {
   const container = document.getElementById("experience-extras-container");
-
   const div = document.createElement("div");
   div.className = "add-remove-field";
-  div.style.gap = "10px";
+  div.style.display='flex'; div.style.gap='10px'; div.style.marginBottom='5px';
 
-  const ano = document.createElement("input");
-  ano.type = "text";
-  ano.placeholder = "Ano";
-  ano.style.width = "80px";
-  ano.oninput = atualizarListaExperienciaExtrasPreview;
+  const ano = document.createElement("input"); ano.type="text"; ano.placeholder="Ano"; ano.style.width="80px"; ano.oninput=atualizarListaExperienciaExtrasPreview;
+  const descricao = document.createElement("textarea"); descricao.placeholder="Detalhe adicional de experiência"; descricao.style.flex="1"; descricao.oninput=atualizarListaExperienciaExtrasPreview;
 
-  const descricao = document.createElement("textarea");
-  descricao.placeholder = "Detalhe adicional de experiência";
-  descricao.style.flex = "1";
-  descricao.oninput = atualizarListaExperienciaExtrasPreview;
+  const btnRemover = document.createElement("button"); btnRemover.type="button"; btnRemover.className="add-remove-btn"; btnRemover.textContent="-";
+  btnRemover.onclick = ()=>{ container.removeChild(div); atualizarListaExperienciaExtrasPreview(); };
 
-  const btnRemover = document.createElement("button");
-  btnRemover.type = "button";
-  btnRemover.className = "add-remove-btn";
-  btnRemover.textContent = "-";
-  btnRemover.onclick = () => {
-    container.removeChild(div);
-    atualizarListaExperienciaExtrasPreview();
-  };
-
-  div.appendChild(ano);
-  div.appendChild(descricao);
-  div.appendChild(btnRemover);
+  div.appendChild(ano); div.appendChild(descricao); div.appendChild(btnRemover);
   container.appendChild(div);
-
   atualizarListaExperienciaExtrasPreview();
 }
 
@@ -607,315 +557,133 @@ function atualizarListaExperienciaExtrasPreview() {
   const container = document.getElementById("experience-extras-container");
   const previews = document.querySelectorAll("#preview-experience-extras-list");
   const titulos = document.querySelectorAll("#preview-experience-title");
+  previews.forEach(p=>p.innerHTML="");
+  let temConteudo=false;
 
-  previews.forEach(preview => preview.innerHTML = "");
-  let temConteudo = false;
-
-  const divs = container.querySelectorAll(".add-remove-field");
-  divs.forEach(div => {
-    const ano = div.querySelector("input");
-    const descricao = div.querySelector("textarea");
-
-    if (descricao.value.trim()) {
-      const linha = document.createElement("div");
-      linha.style.display = "flex";
-      linha.style.justifyContent = "space-between";
-      linha.style.marginBottom = "5px";
-
-      const spanAno = document.createElement("span");
-      spanAno.textContent = ano.value.trim();
-      spanAno.style.fontWeight = "bold";
-      spanAno.style.width = "100px";
-
-      const spanTexto = document.createElement("span");
-      spanTexto.textContent = descricao.value.trim();
-      spanTexto.style.flex = "1";
-
-      linha.appendChild(spanAno);
-      linha.appendChild(spanTexto);
-
-      previews.forEach(preview => preview.appendChild(linha.cloneNode(true)));
-      temConteudo = true;
+  container.querySelectorAll(".add-remove-field").forEach(div=>{
+    const ano = div.querySelector("input")?.value.trim()||'';
+    const desc = div.querySelector("textarea")?.value.trim()||'';
+    if(desc){
+      const linha = document.createElement("div"); linha.style.display="flex"; linha.style.justifyContent="space-between"; linha.style.marginBottom="5px";
+      const spanAno=document.createElement("span"); spanAno.textContent=ano; spanAno.className="ano"; spanAno.style.width="100px"; spanAno.style.fontWeight="bold";
+      const spanDesc=document.createElement("span"); spanDesc.textContent=desc; spanDesc.className="descricao"; spanDesc.style.flex="1";
+      linha.appendChild(spanAno); linha.appendChild(spanDesc);
+      previews.forEach(preview=>preview.appendChild(linha.cloneNode(true)));
+      temConteudo=true;
     }
   });
 
-  const experienciaPrincipal = document.getElementById("experience");
-  if (experienciaPrincipal && experienciaPrincipal.value.trim()) temConteudo = true;
-
-  titulos.forEach(titulo => {
-    titulo.style.display = temConteudo ? "block" : "none";
-  });
+  const experienciaPrincipal = document.getElementById("experience")?.value.trim();
+  if(experienciaPrincipal) temConteudo=true;
+  titulos.forEach(t=>t.style.display=temConteudo?'block':'none');
 }
 
-// --- Campos adicionais ---
-function adicionarCampo(tipo) {
-  const container = document.getElementById(`${tipo}-container`);
+// ---------------------- Formação ----------------------
+function adicionarCampoFormacao() { adicionarCampo('education'); }
 
-  if (tipo === 'education') {
-    const div = document.createElement("div");
-    div.className = "add-remove-field";
-    div.style.gap = "10px";
-
-    const ano = document.createElement("input");
-    ano.type = "text";
-    ano.placeholder = "Ano";
-    ano.style.width = "80px";
-    ano.oninput = () => atualizarListaPreview(tipo);
-
-    const descricao = document.createElement("input");
-    descricao.type = "text";
-    descricao.placeholder = "Descrição";
-    descricao.style.flex = "1";
-    descricao.oninput = () => atualizarListaPreview(tipo);
-
-    const btn = document.createElement("button");
-    btn.textContent = "-";
-    btn.type = "button";
-    btn.className = "add-remove-btn";
-    btn.onclick = () => {
-      container.removeChild(div);
-      atualizarListaPreview(tipo);
-    };
-
-    div.appendChild(ano);
-    div.appendChild(descricao);
-    div.appendChild(btn);
-    container.appendChild(div);
-    atualizarListaPreview(tipo);
-  } else {
-    const div = document.createElement("div");
-    div.className = "add-remove-field";
-
-    const input = document.createElement("input");
-    input.type = "text";
-    input.oninput = () => atualizarListaPreview(tipo);
-
-    const btn = document.createElement("button");
-    btn.textContent = "-";
-    btn.type = "button";
-    btn.className = "add-remove-btn";
-    btn.onclick = () => {
-      container.removeChild(div);
-      atualizarListaPreview(tipo);
-    };
-
-    div.appendChild(input);
-    div.appendChild(btn);
-    container.appendChild(div);
-    atualizarListaPreview(tipo);
+function adicionarCampo(tipo){
+  const container=document.getElementById(`${tipo}-container`);
+  const div=document.createElement("div"); div.className="add-remove-field"; div.style.display='flex'; div.style.gap='10px'; div.style.marginBottom='5px';
+  if(tipo==='education'){
+    const ano=document.createElement("input"); ano.type="text"; ano.placeholder="Ano"; ano.style.width="80px"; ano.oninput=()=>atualizarListaPreview(tipo);
+    const descricao=document.createElement("input"); descricao.type="text"; descricao.placeholder="Descrição"; descricao.style.flex="1"; descricao.oninput=()=>atualizarListaPreview(tipo);
+    const btn=document.createElement("button"); btn.textContent="-"; btn.type="button"; btn.className="add-remove-btn"; btn.onclick=()=>{ container.removeChild(div); atualizarListaPreview(tipo); };
+    div.appendChild(ano); div.appendChild(descricao); div.appendChild(btn);
+  }else{
+    const input=document.createElement("input"); input.type="text"; input.oninput=()=>atualizarListaPreview(tipo);
+    const btn=document.createElement("button"); btn.textContent="-"; btn.type="button"; btn.className="add-remove-btn"; btn.onclick=()=>{ container.removeChild(div); atualizarListaPreview(tipo); };
+    div.appendChild(input); div.appendChild(btn);
   }
+  container.appendChild(div); atualizarListaPreview(tipo);
 }
 
-// --- Atualizar lista preview ---
-function atualizarListaPreview(tipo) {
-  const container = document.getElementById(`${tipo}-container`);
-  const previews = document.querySelectorAll(`#preview-${tipo}-list`);
-  const titulos = document.querySelectorAll(`#preview-${tipo}-title`);
-  if (!previews.length) return;
+// ---------------------- Atualizar lista preview ----------------------
+function atualizarListaPreview(tipo){
+  const container=document.getElementById(`${tipo}-container`);
+  const previews=document.querySelectorAll(`#preview-${tipo}-list`);
+  const titulos=document.querySelectorAll(`#preview-${tipo}-title`);
+  if(!previews.length) return;
+  previews.forEach(p=>p.innerHTML=''); let temConteudo=false;
 
-  previews.forEach(preview => preview.innerHTML = "");
-  let temConteudo = false;
-
-  if (tipo === 'education') {
-    const divs = container.querySelectorAll(".add-remove-field");
-    divs.forEach(div => {
-      const inputs = div.querySelectorAll("input");
-      const ano = inputs[0]?.value.trim() || "";
-      const descricao = inputs[1]?.value.trim() || "";
-
-      if (descricao) {
-        const linha = document.createElement("div");
-        linha.style.display = "flex";
-        linha.style.justifyContent = "space-between";
-        linha.style.marginBottom = "5px";
-
-        const spanAno = document.createElement("span");
-        spanAno.textContent = ano;
-        spanAno.style.fontWeight = "bold";
-        spanAno.style.width = "100px";
-
-        const spanTexto = document.createElement("span");
-        spanTexto.textContent = descricao;
-        spanTexto.style.flex = "1";
-
-        linha.appendChild(spanAno);
-        linha.appendChild(spanTexto);
-
-        previews.forEach(preview => preview.appendChild(linha.cloneNode(true)));
-        temConteudo = true;
+  if(tipo==='education'){
+    container.querySelectorAll(".add-remove-field").forEach(div=>{
+      const inputs=div.querySelectorAll("input"); const ano=inputs[0]?.value.trim()||''; const descricao=inputs[1]?.value.trim()||'';
+      if(descricao){
+        const linha=document.createElement("div"); linha.style.display="flex"; linha.style.justifyContent="space-between"; linha.style.marginBottom="5px";
+        const spanAno=document.createElement("span"); spanAno.textContent=ano; spanAno.className="ano"; spanAno.style.width="100px"; spanAno.style.fontWeight="bold";
+        const spanDesc=document.createElement("span"); spanDesc.textContent=descricao; spanDesc.className="descricao"; spanDesc.style.flex="1";
+        linha.appendChild(spanAno); linha.appendChild(spanDesc); previews.forEach(preview=>preview.appendChild(linha.cloneNode(true))); temConteudo=true;
       }
     });
-  } else if (tipo === 'languages') {
-    const divs = container.querySelectorAll(".add-remove-field");
-    divs.forEach(div => {
-      const inputs = div.querySelectorAll("input, select");
-      const idioma = inputs[0]?.value.trim() || "";
-      let nivel = inputs[1]?.value;
-
-      if (idioma) {
-        const linha = document.createElement("div");
-        linha.style.display = "flex";
-        linha.style.alignItems = "center";
-        linha.style.marginBottom = "6px";
-
-        const spanIdioma = document.createElement("span");
-        spanIdioma.textContent = idioma;
-        spanIdioma.style.fontWeight = "bold";
-        spanIdioma.style.width = "150px";
-        linha.appendChild(spanIdioma);
-
-        if (idiomaNivelTipo === 'select') {
-          const spanNivel = document.createElement("span");
-          spanNivel.textContent = nivel;
-          spanNivel.style.flex = "1";
-          linha.appendChild(spanNivel);
-        } else {
-          const barraContainer = document.createElement("div");
-          barraContainer.className = "nivel-barra-container";
-
-          const barraFundo = document.createElement("div");
-          barraFundo.className = "nivel-barra-fundo";
-
-          const barraPreenchida = document.createElement("div");
-          barraPreenchida.className = "nivel-barra-preenchida";
-
-          const larguraPerc = Math.min(Math.max(parseInt(nivel), 0), 4) * 25;
-          barraPreenchida.style.width = larguraPerc + "%";
-
-          barraFundo.appendChild(barraPreenchida);
-          barraContainer.appendChild(barraFundo);
-          linha.appendChild(barraContainer);
+  } else if(tipo==='languages'){
+    container.querySelectorAll(".add-remove-field").forEach(div=>{
+      const inputs=div.querySelectorAll("input, select"); const idioma=inputs[0]?.value.trim()||''; let nivel=inputs[1]?.value;
+      if(idioma){
+        const linha=document.createElement("div"); linha.style.display="flex"; linha.style.alignItems="center"; linha.style.marginBottom="6px";
+        const spanIdioma=document.createElement("span"); spanIdioma.textContent=idioma; spanIdioma.style.fontWeight="bold"; spanIdioma.style.width="150px"; linha.appendChild(spanIdioma);
+        if(idiomaNivelTipo==='select'){
+          const spanNivel=document.createElement("span"); spanNivel.textContent=nivel; spanNivel.style.flex="1"; linha.appendChild(spanNivel);
+        }else{
+          const barraContainer=document.createElement("div"); barraContainer.className="nivel-barra-container";
+          const barraFundo=document.createElement("div"); barraFundo.className="nivel-barra-fundo";
+          const barraPreenchida=document.createElement("div"); barraPreenchida.className="nivel-barra-preenchida";
+          const larguraPerc=Math.min(Math.max(parseInt(nivel),0),4)*25; barraPreenchida.style.width=larguraPerc+"%";
+          barraFundo.appendChild(barraPreenchida); barraContainer.appendChild(barraFundo); linha.appendChild(barraContainer);
         }
-
-        previews.forEach(preview => preview.appendChild(linha.cloneNode(true)));
-        temConteudo = true;
+        previews.forEach(preview=>preview.appendChild(linha.cloneNode(true))); temConteudo=true;
       }
     });
   } else {
-    const inputs = container.querySelectorAll("input");
-    inputs.forEach(input => {
-      const val = input.value.trim();
-      if (val) {
-        const li = document.createElement("li");
-        let icon = "• ";
-        if (tipo === "phone") icon = "📞 ";
-        else if (tipo === "email") icon = "✉️ ";
-        else if (tipo === "address") icon = "🏠 ";
-        else if (tipo === "website") icon = "🌐 ";
-        else if (tipo === "skills") icon = "⚙️ ";
-        else if (tipo === "other-skills") icon = "⭐ ";
-        li.textContent = icon + val;
-        previews.forEach(preview => preview.appendChild(li.cloneNode(true)));
-        temConteudo = true;
+    container.querySelectorAll("input").forEach(input=>{
+      const val=input.value.trim(); if(val){
+        const li=document.createElement("li"); let icon="• "; 
+        if(tipo==="phone") icon="📞 "; else if(tipo==="email") icon="✉️ "; else if(tipo==="address") icon="🏠 "; else if(tipo==="website") icon="🌐 "; else if(tipo==="skills") icon="⚙️ "; else if(tipo==="other-skills") icon="⭐ ";
+        li.textContent=icon+val; previews.forEach(preview=>preview.appendChild(li.cloneNode(true))); temConteudo=true;
       }
     });
   }
-
-  titulos.forEach(t => t.style.display = temConteudo ? "block" : "none");
+  titulos.forEach(t=>t.style.display=temConteudo?'block':'none');
 }
 
-// --- Aplica todos os dados no preview ---
-function aplicarTodosOsDados() {
-  updatePreview('name');
-  updatePreview('position');
-  updatePreview('profile');
-  updatePreview('experience');
-  updatePreview('reference');
-  updatePreview('availability');
-  atualizarListaPreview('phone');
-  atualizarListaPreview('email');
-  atualizarListaPreview('address');
-  atualizarListaPreview('website');
-  atualizarListaPreview('education');
-  atualizarListaPreview('skills');
-  atualizarListaPreview('other-skills');
-  atualizarListaPreview('languages');
+// ---------------------- Aplicar todos os dados ----------------------
+function aplicarTodosOsDados(){
+  ['name','position','profile','experience','reference','availability'].forEach(updatePreview);
+  ['phone','email','address','website','education','skills','other-skills','languages'].forEach(atualizarListaPreview);
   atualizarListaExperienciaExtrasPreview();
 }
 
-// --- Download PDF (desktop) ---
-function downloadPDF() {
-  window.scrollTo(0, 0);
-
-  const loading = document.getElementById("loading-msg");
-  const button = document.getElementById("download-btn");
-
-  loading.style.display = "block";
-  button.disabled = true;
-
-  setTimeout(() => {
-    const element = document.getElementById("cv-preview");
-
+// ---------------------- PDF ----------------------
+function downloadPDF(){
+  window.scrollTo(0,0);
+  const loading=document.getElementById("loading-msg"); const button=document.getElementById("download-btn");
+  loading.style.display="block"; button.disabled=true;
+  setTimeout(()=>{
     html2pdf().set({
-      margin: [0, 0, 0, 0],
-      filename: "cv.pdf",
-      image: { type: "jpeg", quality: 1 },
-      html2canvas: {
-        scale: 2,
-        scrollY: 0,
-        useCORS: true
-      },
-      jsPDF: {
-        unit: "px",
-        format: [794, 1123],
-        orientation: "portrait"
-      }
-    }).from(element).save().then(() => {
-      loading.style.display = "none";
-      button.disabled = false;
-    });
-  }, 300);
+      margin:[0,0,0,0],
+      filename:"cv.pdf",
+      image:{type:"jpeg", quality:1},
+      html2canvas:{scale:2, scrollY:0, useCORS:true},
+      jsPDF:{unit:"px", format:[794,1123], orientation:"portrait"}
+    }).from(document.getElementById("cv-preview")).save().then(()=>{ loading.style.display="none"; button.disabled=false; });
+  },300);
 }
 
-// --- Download PDF (mobile) ---
-function downloadPDFMobile() {
-  const el = document.getElementById("cv-hidden");
-  const loading = document.getElementById("loading-msg");
-
-  const prevDisplay = el.style.display;
-  el.style.display = "block";  // garantir visibilidade
-
-  loading.style.display = "block";
-
-  html2pdf().set({
-    margin: [0, 0, 0, 0],
-    filename: "cv.pdf",
-    image: { type: "jpeg", quality: 1 },
-    html2canvas: { scale: 2, scrollY: 0, useCORS: true },
-    jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" }
-  }).from(el).save().then(() => {
-    el.style.display = prevDisplay;
-    loading.style.display = "none";
-  });
+function downloadPDFMobile(){
+  const el=document.getElementById("cv-hidden"); const loading=document.getElementById("loading-msg"); const prevDisplay=el.style.display;
+  el.style.display="block"; loading.style.display="block";
+  html2pdf().set({ margin:[0,0,0,0], filename:"cv.pdf", image:{type:"jpeg", quality:1}, html2canvas:{scale:2, scrollY:0, useCORS:true}, jsPDF:{unit:"px", format:[794,1123], orientation:"portrait"} }).from(el).save().then(()=>{ el.style.display=prevDisplay; loading.style.display="none"; });
 }
 
-// --- Abrir preview mobile ---
-function abrirPreviewMobile() {
-  document.getElementById('mobile-preview-page').style.display = 'block';
-}
+// ---------------------- Preview mobile ----------------------
+function abrirPreviewMobile(){ document.getElementById('mobile-preview-page').style.display='block'; }
+function fecharPreviewMobile(){ document.getElementById('mobile-preview-page').style.display='none'; }
 
-// --- Fechar preview mobile ---
-function fecharPreviewMobile() {
-  document.getElementById('mobile-preview-page').style.display = 'none';
-}
+// ---------------------- Eventos ----------------------
+document.getElementById("btnTemplateSelector").addEventListener("click", ()=>{ document.getElementById("templateModal").style.display="block"; });
+window.addEventListener("DOMContentLoaded",()=>{ const template=new URLSearchParams(window.location.search).get('template')||'template1'; carregarTemplate(template); });
 
-// --- Eventos ---
-document.getElementById("btnTemplateSelector").addEventListener("click", () => {
-  document.getElementById("templateModal").style.display = "block";
-});
-
-// --- Carrega template ao iniciar página ---
-window.addEventListener("DOMContentLoaded", function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const template = urlParams.get('template') || 'template1';
-  carregarTemplate(template);
-});
-
-//trocar de cor
-function trocarCor(corHex) {
-  document.documentElement.style.setProperty('--main-color', corHex);
-}
-
+// ---------------------- Trocar cor ----------------------
+function trocarCor(corHex){ document.documentElement.style.setProperty('--main-color', corHex); }
 </script>
 <script>
   //traduzir documento
