@@ -117,7 +117,27 @@
     }
     /* vale para Formação e Experiência */
 /* Container das linhas de experiência/educação */
-#preview-experience-extras-list div,
+#preview-experience-extras-list div {
+  display: flex;              /* Mantém ano e descrição na mesma linha */
+  justify-content: flex-start; /* Alinha à esquerda */
+  gap: 10px;                  /* Espaço entre ano e descrição */
+  margin-bottom: 5px;         /* Espaço entre linhas */
+  flex-wrap: wrap;            /* Quebra linha em telas pequenas */
+}
+
+/* Ano */
+#preview-experience-extras-list .ano {
+  width: 100px;               /* Largura fixa para alinhar todas as linhas */
+  font-weight: bold;          /* Destaque */
+  flex-shrink: 0;             /* Não encolhe em telas pequenas */
+}
+
+/* Descrição */
+#preview-experience-extras-list .descricao {
+  flex: 1;                    /* Ocupa o restante do espaço */
+  word-break: break-word;     /* Quebra linha se o texto for longo */
+}
+
 #preview-education-list div {
   display: flex;              /* Mantém ano e descrição na mesma linha */
   justify-content: flex-start; /* Alinha à esquerda */
@@ -127,7 +147,6 @@
 }
 
 /* Ano */
-#preview-experience-extras-list .ano,
 #preview-education-list .ano {
   width: 100px;               /* Largura fixa para alinhar todas as linhas */
   font-weight: bold;          /* Destaque */
@@ -135,8 +154,30 @@
 }
 
 /* Descrição */
-#preview-experience-extras-list .descricao,
 #preview-education-list .descricao {
+  flex: 1;                    /* Ocupa o restante do espaço */
+  word-break: break-word;     /* Quebra linha se o texto for longo */
+}
+/*education*/
+.cv.hidden #preview-education-list div {
+  display: flex;              /* Mantém ano e descrição na mesma linha */
+  justify-content: flex-start; /* Alinha à esquerda */
+  gap: 50px;                  /* Espaço entre ano e descrição */
+  margin-bottom: 5px;         /* Espaço entre linhas */
+  flex-wrap: wrap;            /* Quebra linha em telas pequenas */
+  padding-left: 10px;
+}
+
+/* Ano */
+.cv.hidden #preview-education-list .ano {
+  width: 100px;               /* Largura fixa para alinhar todas as linhas */
+  font-weight: bold;          /* Destaque */
+  flex-shrink: 0;             /* Não encolhe em telas pequenas */
+
+}
+
+/* Descrição */
+.cv.hidden #preview-education-list .descricao {
   flex: 1;                    /* Ocupa o restante do espaço */
   word-break: break-word;     /* Quebra linha se o texto for longo */
 }
@@ -286,7 +327,7 @@
 #preview-education-list .descricao {
   flex: 1;                    /* Ocupa o restante do espaço */
   word-break: break-word;     /* Quebra linha se o texto for longo */
-  margin-left: -15vw;
+  margin-left: -8vw;
 }
 
 
