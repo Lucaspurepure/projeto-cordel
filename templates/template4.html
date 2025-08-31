@@ -6,7 +6,7 @@
     html, body {
       margin: 0; padding: 0; height: 100%; width: 100%;
       font-family: 'Montserrat', sans-serif;
-      overflow-y: auto;
+      overflow-y: hidden;
     
     }
 
@@ -14,6 +14,8 @@
   --main-color: #2f3e52;
   --text-light: white;
   --text-dark: black;
+  --a4-ratio: 210 / 297;
+  --page-gap: 1.5rem;
    }
 
     .cv.desktop .preview {
@@ -309,15 +311,16 @@
 .cv.mobile .right {height: 60vh;}
 .cv.mobile .left {height: 60vh;}
 .cv.mobile .preview {
-      width: 90vw;
-      height: 70vh;
-      display: flex;
+      width: min(90vw, calc((75vh - 2 * var(--page-gap)) * var(--a4-ratio)));
+      max-height: calc(75vh - 2 * var(--page-gap));
+      aspect-ratio: 210 / 297;
+      display: block;
       box-sizing: border-box;
       background: var(--text-light);
       border: 1px solid rgba(0, 0, 0, 0.171);
       border-radius: 5px;
       box-shadow: 5px 5px 10px gray;
-      display: block;
+      overflow: hidden;
     }
 .cv.hidden .preview {
       width: 794px;

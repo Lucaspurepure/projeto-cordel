@@ -14,6 +14,8 @@
   --main-color: #2f3e52;
   --text-light: white;
   --text-dark: black;
+  --a4-ratio: 210 / 297;
+  --page-gap: 1.5rem;
    }
 
     .cv.desktop .preview {
@@ -223,6 +225,14 @@
       gap: 5vw;
       padding: 2vw;
     }
+    .cv.mobile .top h1 {
+      font-size: 2.5vw;
+    }
+    .cv.mobile .head > h2 {
+      margin-top: -2vw;
+      padding-bottom: 2vw;
+      font-size: 1.8vw;
+    }
     .cv.mobile img {
       width: 10vw;
       height: 10vw;
@@ -311,15 +321,16 @@
 .cv.mobile .right {height: 60vh;}
 .cv.mobile .left {height: 60vh;}
 .cv.mobile .preview {
-      width: 90vw;
-      height: 70vh;
-      display: flex;
+      width: min(90vw, calc((75vh - 2 * var(--page-gap)) * var(--a4-ratio)));
+      max-height: calc(75vh - 2 * var(--page-gap));
+      aspect-ratio: 210 / 297;
+      display: block;
       box-sizing: border-box;
       background: var(--text-light);
       border: 1px solid rgba(0, 0, 0, 0.171);
       border-radius: 5px;
       box-shadow: 5px 5px 10px gray;
-      display: block;
+      overflow: hidden;
     }
 .cv.hidden .preview {
       width: 794px;

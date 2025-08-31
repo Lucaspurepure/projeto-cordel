@@ -10,11 +10,18 @@
       font-family: 'Montserrat', sans-serif;
       width: 100%;
       height: 100%;
-      overflow: auto;
+      overflow: hidden;
     }
+    :root {
+  --main-color: #2f3e52;
+  --text-light: white;
+  --text-dark: black;
+  --a4-ratio: 210 / 297;
+  --page-gap: 1.5rem;
+   }
 
     .left {
-      width: 30%;
+      width: 35%;
       background-color: #1e293b;
       color: white;
       padding: 25px;
@@ -52,7 +59,7 @@
     }
 
     .right {
-      width: 70%;
+      width: 65%;
       padding: 40px 30px;
       color: #1e293b;
       display: flex;
@@ -169,7 +176,7 @@
   }
 
   .cv.mobile .left {
-      width: 30%;
+      width: 35%;
       background-color: #1e293b;
       color: white;
       padding: 2.5vw;
@@ -207,7 +214,7 @@
     }
 
     .cv.mobile .right {
-      width: 70%;
+      width: 65%;
       padding: 4vw 3vw;
       color: #1e293b;
       display: flex;
@@ -254,14 +261,16 @@
 .cv.mobile .right {height: 70vh;}
 .cv.mobile .left {height: 70vh;}
 .cv.mobile .preview {
-      width: 90vw;
-      height: 70vh;
+      width: min(90vw, calc((75vh - 2 * var(--page-gap)) * var(--a4-ratio)));
+      max-height: calc(75vh - 2 * var(--page-gap));
+      aspect-ratio: 210 / 297;
       display: flex;
       box-sizing: border-box;
       background: var(--text-light);
       border: 1px solid rgba(0, 0, 0, 0.171);
       border-radius: 5px;
       box-shadow: 5px 5px 10px gray;
+      overflow: hidden; 
     }
 .cv.hidden .preview {
       width: 794px;

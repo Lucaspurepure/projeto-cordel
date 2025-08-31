@@ -6,9 +6,17 @@
     html, body {
       margin: 0; padding: 0; height: 100%; width: 100%;
       font-family: 'Montserrat', sans-serif;
-      overflow-y: auto;
+      overflow-y: hidden;
     }
     
+    :root {
+  --main-color: #2f3e52;
+  --text-light: white;
+  --text-dark: black;
+  --a4-ratio: 210 / 297;
+  --page-gap: 1.5rem;
+   }
+
     .left {
       width: 35%;
       height: 1123px; /* ocupa toda altura da página */
@@ -108,7 +116,7 @@
     padding-left: 20px; /* para dar espaço para o bullet */
     }
 
-        /* Container das linhas de experiência/educação */
+/* Container das linhas de experiência/educação */
 #preview-experience-extras-list div {
   display: flex;              /* Mantém ano e descrição na mesma linha */
   justify-content: flex-start; /* Alinha à esquerda */
@@ -275,14 +283,16 @@
 .cv.mobile .right {height: 70vh;}
 .cv.mobile .left {height: 70vh;}
 .cv.mobile .preview {
-      width: 90vw;
-      height: 70vh;
+      width: min(90vw, calc((75vh - 2 * var(--page-gap)) * var(--a4-ratio)));
+      max-height: calc(75vh - 2 * var(--page-gap));
+      aspect-ratio: 210 / 297;
       display: flex;
       box-sizing: border-box;
       background: var(--text-light);
       border: 1px solid rgba(0, 0, 0, 0.171);
       border-radius: 5px;
       box-shadow: 5px 5px 10px gray;
+      overflow: hidden;
     }
 .cv.hidden .preview {
       width: 794px;
