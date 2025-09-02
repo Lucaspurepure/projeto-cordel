@@ -6,7 +6,7 @@
     html, body {
       margin: 0; padding: 0; height: 100%; width: 100%;
       font-family: 'Montserrat', sans-serif;
-      overflow-y: hidden;
+      overflow-y: auto;
     
     }
 
@@ -91,6 +91,10 @@
     }
     .left .section ul li {
       margin-bottom: 4px;
+    }
+    .left .section p {
+      font-size: 14px;
+      text-transform: uppercase;
     }
     .right {
       width: 65%;
@@ -273,6 +277,10 @@
     .cv.mobile .left .section ul li {
       margin-bottom: 0.4vw;
     }
+    .cv.mobile .left .section p {
+      font-size: 1.4vw;
+      text-transform: uppercase;
+    }
     .cv.mobile .right {
       width: 65%;
       height: 100%;
@@ -374,6 +382,7 @@
           <ul id="preview-address-list"></ul>
           <ul id="preview-website-list"></ul>
         </div>
+        
         <div class="section">
           <h3 id="preview-skills-title">Habilidades Técnicas</h3>
           <ul id="preview-skills-list"></ul>
@@ -392,19 +401,23 @@
           <h3 id="preview-profile-title">Perfil</h3>
           <p id="preview-profile"></p>
         </div>
-        <div class="section">
+
+      <div class="section">
         <h3 id="preview-experience-title">Experiência Profissional</h3>
         <p id="preview-experience"></p>
         <ul id="preview-experience-extras-list" style="padding-left: 20px; margin-top: 5px;"></ul>
       </div>
-        <div class="section">
+
+      <div class="section">
           <h3 id="preview-education-title">Formação</h3>
           <ul id="preview-education-list"></ul>
         </div>
-        <div class="section">
+        
+      <div class="section">
           <h3 id="preview-other-skills-title">Outras Habilidades</h3>
           <ul id="preview-other-skills-list"></ul>
-        </div>
+      </div>
+
         <div class="section">
           <h3 id="preview-reference-title">Referência</h3>
           <p id="preview-reference"></p>

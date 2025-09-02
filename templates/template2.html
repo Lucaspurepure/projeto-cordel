@@ -10,7 +10,7 @@
       font-family: 'Montserrat', sans-serif;
       width: 100%;
       height: 100%;
-      overflow: hidden;
+      overflow: auto;
     }
     
     :root {
@@ -57,6 +57,10 @@
     }
     .left .section ul li {
       margin-bottom: 6px;
+    }
+    .left .section p {
+      font-size: 14px;
+      text-transform: uppercase;
     }
 
     .right {
@@ -187,43 +191,47 @@
       width: 35%;
       background-color: #3074ac;
       color: white;
-      padding: 2.5vw;
+      padding: 1.25vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       height: 100%;
     }
 .cv.mobile .left img {
-      width: 10vw;
-      height: 10vw;
+      width: 5vh;
+      height: 5vh;
       border-radius: 50%;
       border: 0.4vw solid white;
       object-fit: cover;
-      margin-bottom: 1vw;
+      margin-bottom: 0.5vh;
     }
 .cv.mobile .left .section {
       width: 100%;
-      margin-top: 2.5vw;
+      margin-top: 1.25vh;
     }
 .cv.mobile .left .section h3 {
-      font-size: 1.4vw;
-      margin-bottom: 1vw;
-      border-bottom: 1px solid white;
-      padding-bottom: 0.4vw;
+      font-size: 0.7vh;
+      margin-bottom: 0.5vh;
+      border-bottom: 0.05vh solid white;
+      padding-bottom: 0.2vh;
       display: none;
     }
 .cv.mobile .left .section ul {
       list-style: none;
       padding-left: 0;
-      font-size: 1.3vw;
+      font-size: 0.65vh;
     }
 .cv.mobile .left .section ul li {
-      margin-bottom: 0.6vw;
+      margin-bottom: 0.3vh;
+    }
+.cv.mobile .left .section p {
+      font-size: 0.7vh;
+      text-transform: uppercase;
     }
 
 .cv.mobile .right {
       width: 65%;
-      padding: 4vw 3vw;
+      padding: 2vh 1.5vh;
       color: #1e293b;
       display: flex;
       flex-direction: column;
@@ -232,42 +240,42 @@
       background-color: white;
     }
 .cv.mobile .header {
-      margin-bottom: 3vw;
+      margin-bottom: 1.5vh;
       text-align: left;
     }
 .cv.mobile .header h1 {
-      font-size: 2.8vw;
+      font-size: 1.4vh;
       margin: 0;
       background-color: #3785c5;
       border-radius: 0px 50px 50px 0px;
       color: white;
-      padding: 2vw;
-      margin-left: -3vw;
+      padding: 1vh;
+      margin-left: -1.5vh;
     }
 .cv.mobile .header h2 {
-      font-size: 0.8vw;
+      font-size: 0.8vh;
       font-weight: normal;
-      margin-top: 0.5vw;
+      margin-top: 0.25vh;
       text-align: center;
     }
 .cv.mobile .right .section {
-      margin-bottom: 2vw;
+      margin-bottom: 1vh;
     }
 .cv.mobile .right .section h3 {
-      font-size: 1.5vw;
-      border-bottom: 0.2vw solid #3074ac;
-      margin-bottom: 1vw;
-      padding-bottom: 0.4vw;
+      font-size: 0.75vh;
+      border-bottom: 0.1vh solid #3074ac;
+      margin-bottom: 0.5vh;
+      padding-bottom: 0.2vh;
       display: none;
     }
 .cv.mobile .right .section p {
-      font-size: 1.4vw;
-      margin-bottom: 0.8vw;
+      font-size: 0.7vh;
+      margin-bottom: 0.4vh;
       
     }
 .cv.mobile .right .section ul {
-      padding-left: 2vw;
-      font-size: 1.4vw;
+      padding-left: 1vh;
+      font-size: 0.7vh;
       list-style-type: square;
       margin: 0;
     }
@@ -295,7 +303,7 @@
       box-sizing: border-box;
       background: var(--text-light);
     }
-    .cv.mobile #preview-experience-extras-list div,
+.cv.mobile #preview-experience-extras-list div,
 #preview-education-list div {
   display: flex;              /* Mantém ano e descrição na mesma linha */
   justify-content: flex-start; /* Alinha à esquerda */
@@ -309,7 +317,6 @@
 #preview-education-list .ano {
   width: 10vw;               /* Largura fixa para alinhar todas as linhas */
   font-weight: bold;          /* Destaque */
-               /* Não encolhe em telas pequenas */
 }
 
 /* Descrição */
@@ -319,6 +326,8 @@
   word-break: break-word;     /* Quebra linha se o texto for longo */
   margin-left: -8vw;
 }
+
+
 }
 
   </style>
@@ -339,11 +348,17 @@
         <h3 id="preview-skills-title">Habilidades Técnicas</h3>
         <ul id="preview-skills-list"></ul>
       </div>
+      
+      <div class="section">
+        <h3 id="preview-other-skills-title">Outras Habilidades</h3>
+        <ul id="preview-other-skills-list"></ul>
+      </div>
 
       <div class="section">
         <h3 id="preview-languages-title">Idiomas</h3>
         <ul id="preview-languages-list"></ul>
       </div>
+      
 
       <div class="section">
           <h3 id="preview-availability-title" >Disponibilidade</h3>
@@ -371,11 +386,6 @@
       <div class="section">
         <h3 id="preview-education-title">Formação</h3>
         <ul id="preview-education-list"></ul>
-      </div>
-
-      <div class="section">
-        <h3 id="preview-other-skills-title">Outras Habilidades</h3>
-        <ul id="preview-other-skills-list"></ul>
       </div>
 
       <div class="section">

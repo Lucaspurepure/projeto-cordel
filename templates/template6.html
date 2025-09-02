@@ -6,7 +6,7 @@
     html, body {
       margin: 0; padding: 0; height: 100%; width: 100%;
       font-family: 'Montserrat', sans-serif;
-      overflow-y: hidden;
+      overflow-y: auto;
     }
     
     :root {
@@ -75,6 +75,10 @@
     }
     .left .section ul li {
       margin-bottom: 4px;
+    }
+    .left .section p {
+      font-size: 14px;
+      text-transform: uppercase;
     }
     .right {
       width: 65%;
@@ -181,6 +185,7 @@
   flex: 1;                    /* Ocupa o restante do espaço */
   word-break: break-word;     /* Quebra linha se o texto for longo */
 }
+
    @media screen and (max-width: 768px) {
   body {
     height: auto;
@@ -246,6 +251,10 @@
     .cv.mobile .left .section ul li {
       margin-bottom: 0.4vw;
     }
+    .cv.mobile .left .section p {
+      font-size: 1.4vw;
+      text-transform: uppercase;
+    }
     .cv.mobile .right {
       width: 65%;
       height: 100%; /* altura total para alinhar */
@@ -268,7 +277,7 @@
       width: 100%;
       text-align: left;
     }
-    .right .section ul {
+    .cv.mobile .right .section ul {
       padding-left: 2vw;
       font-size: 1.2vw;
       margin: 0;
