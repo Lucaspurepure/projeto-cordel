@@ -182,6 +182,14 @@
   flex: 1;                    /* Ocupa o restante do espaço */
   word-break: break-word;     /* Quebra linha se o texto for longo */
 }
+
+.cv.hidden #preview-experience-extras-list div {
+  display: flex;              /* Mantém ano e descrição na mesma linha */
+  justify-content: flex-start; /* Alinha à esquerda */
+  gap: 3px;                  /* Espaço entre ano e descrição */
+  margin-bottom: 5px;         /* Espaço entre linhas */
+  flex-wrap: wrap;            /* Quebra linha em telas pequenas */
+}
 /*education*/
 .cv.hidden #preview-education-list div {
   display: flex;              /* Mantém ano e descrição na mesma linha */
@@ -318,7 +326,7 @@
     }
     .cv.mobile .right .section ul {
       padding-left: 1vh;
-      font-size: 0.75vh;
+      font-size: 0.73vh;
       margin: 0;
     }
     .cv.mobile .right p {
